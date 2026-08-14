@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glycemic Companion — Glycemic Index &amp; Load Companion</title>
+<style>
+:root{
+  --ink:#18362a; --ink-soft:#40564b; --ink-mute:#6f7f77;
+  --paper:#faf9f4; --paper-2:#eef4ee; --card:#ffffff; --line:#d8e3dc; --line-soft:#e8eee9;
+
+  --accent:#247a58; --accent-soft:#e4f1e9; --accent-deep:#075b3b;
+  --accent-2:#e4a400; --accent-2-soft:#fff2cf;
+  --accent-3:#d52d2d; --accent-3-soft:#ffe3e3;
+
+  --low:#188a45; --low-bg:#e3f5e9;
+  --mid:#e5a000; --mid-bg:#fff1c9;
+  --high:#d22c2c; --high-bg:#ffe0e0;
+  --zero:#718078; --zero-bg:#edf1ee;
+
+  --r-sm:12px; --r-md:20px; --r-lg:28px; --r-xl:40px;
+  --shadow-sm:0 1px 2px rgba(24,36,32,.05);
+  --shadow-md:0 10px 28px -14px rgba(24,36,32,.18);
+  --shadow-lg:0 28px 64px -22px rgba(24,36,32,.24);
+  --shadow-glow:0 0 0 1px rgba(47,111,86,.07),0 22px 50px -18px rgba(47,111,86,.30);
+
+  --display:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --list-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --list-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+
+  /* mask icons — used only via ::before/::after on existing, untouched JS-generated classes */
+  --i-leaf:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 4 L17 13 A5 6 0 1 1 7 13 Z' transform='rotate(38 12 12)'/%3E%3C/svg%3E");
+  --i-flame:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 3 L18 14 A6 7 0 1 1 6 14 Z'/%3E%3C/svg%3E");
+  --i-gauge:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M4 15 A8 8 0 0 1 20 15 Z'/%3E%3C/svg%3E");
+  --i-dash:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect fill='%23000' x='5' y='11' width='14' height='2' rx='1'/%3E%3C/svg%3E");
+  --i-x:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3C/svg%3E");
+  --i-trash:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M10 7l1 13a1 1 0 0 0 1 1h0 4a1 1 0 0 0 1-1l1-13'/%3E%3C/svg%3E");
+  --i-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  --i-noresult:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.2' y2='16.2'/%3E%3C/svg%3E");
+  --i-plate:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1320px;margin:0 auto;padding:0 28px}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select{font:inherit;color:inherit}
+img,svg{display:block}
+a{color:inherit}
+::selection{background:var(--accent);color:#fff}
+
+/* ================= ABOUT TAB ================= */
+.about-hero{position:relative;border-radius:var(--r-xl);padding:52px 44px;margin-bottom:4px;border:1px solid var(--line);box-shadow:var(--shadow-sm);background:
+  radial-gradient(circle at 12% 18%, rgba(47,111,86,.14), transparent 42%),
+  radial-gradient(circle at 88% 8%, rgba(217,164,65,.20), transparent 46%),
+  radial-gradient(circle at 60% 100%, rgba(217,122,95,.13), transparent 50%),
+  var(--card)}
+.about-hero-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.lp-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep);box-shadow:var(--shadow-sm)}
+.lp-eyebrow svg{width:13px;height:13px;stroke:var(--accent)}
+.about-hero h1{font-size:clamp(28px,4vw,48px);line-height:1.08;letter-spacing:-.02em;font-weight:600;margin-top:18px;max-width:14ch}
+.about-hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent-deep),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lp-sub{margin-top:20px;font-size:17.5px;color:var(--ink-soft);max-width:46ch;line-height:1.55}
+.lp-ctas{display:flex;gap:14px;align-items:center;margin-top:32px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:999px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;box-shadow:var(--shadow-sm);transition:transform .18s,box-shadow .18s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(47,111,86,.1),0 30px 60px -16px rgba(47,111,86,.4)}
+.btn-primary:active{transform:translateY(0) scale(.98)}
+.btn-primary svg{width:17px;height:17px;stroke:#fff}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:15px 22px;border-radius:999px;background:transparent;border:1px solid var(--line);color:var(--ink-soft);font-size:14.5px;font-weight:600;transition:border-color .15s,color .15s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--ink)}
+.lp-trust{display:flex;align-items:center;gap:10px;margin-top:34px;font-size:12.5px;color:var(--ink-mute)}
+.lp-trust svg{width:15px;height:15px;stroke:var(--accent)}
+.lp-stats{display:flex;gap:26px;margin-top:14px;flex-wrap:wrap}
+.lp-stats div{font-family:var(--display);font-size:22px;font-weight:600;color:var(--ink)}
+.lp-stats span{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-top:2px}
+
+/* hero illustration — bespoke SVG "grain bowl", no stock photography */
+.lp-illus{position:relative;display:flex;align-items:center;justify-content:center}
+.lp-illus svg{width:100%;max-width:420px;filter:drop-shadow(0 30px 50px rgba(24,36,32,.18))}
+.lp-illus .float-card{position:absolute;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);border-radius:var(--r-md);padding:12px 16px;box-shadow:var(--shadow-lg);font-size:12.5px}
+.lp-illus .fc1{top:6%;left:-4%}
+.lp-illus .fc2{bottom:10%;right:-6%}
+.float-card b{display:block;font-family:var(--display);font-size:20px;color:var(--accent-deep)}
+.float-card span{color:var(--ink-mute);font-size:11px}
+
+/* section shell */
+.lp-section{padding:52px 0}
+.lp-section:first-of-type{padding-top:44px}
+.lp-head{max-width:640px;margin:0 0 44px}
+.lp-head .eyebrow-txt{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-deep);margin-bottom:12px}
+.lp-head h2{font-size:clamp(26px,3.6vw,36px);letter-spacing:-.015em;font-weight:600}
+.lp-head p{margin-top:14px;font-size:16px;color:var(--ink-soft);max-width:56ch}
+
+/* reveal-on-scroll (progressive enhancement; content visible by default without JS) */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* benefits */
+.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.bcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px 24px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s,border-color .2s}
+.bcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:transparent}
+.bcard .icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.bcard .icon svg{width:22px;height:22px}
+.bcard:nth-child(1) .icon{background:var(--accent-soft)} .bcard:nth-child(1) .icon svg{stroke:var(--accent-deep)}
+.bcard:nth-child(2) .icon{background:var(--accent-2-soft)} .bcard:nth-child(2) .icon svg{stroke:#93701e}
+.bcard:nth-child(3) .icon{background:var(--accent-3-soft)} .bcard:nth-child(3) .icon svg{stroke:#a85639}
+.bcard:nth-child(4) .icon{background:var(--paper-2)} .bcard:nth-child(4) .icon svg{stroke:var(--ink-soft)}
+.bcard h3{font-size:17.5px;font-weight:600;margin-bottom:8px}
+.bcard p{font-size:14px;color:var(--ink-soft);line-height:1.55}
+
+/* why it matters */
+.why-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);padding:48px;box-shadow:var(--shadow-md)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:36px}
+.why-card{border-radius:var(--r-lg);padding:26px;border:1px solid var(--line-soft)}
+.why-card.gi{background:linear-gradient(160deg,var(--accent-soft),transparent)}
+.why-card.gl{background:linear-gradient(160deg,var(--accent-2-soft),transparent)}
+.why-card h4{font-size:18px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.why-card h4 svg{width:19px;height:19px}
+.why-card.gi h4 svg{stroke:var(--accent-deep)} .why-card.gl h4 svg{stroke:#93701e}
+.why-card p{font-size:14px;color:var(--ink-soft);line-height:1.6}
+.why-card .formula{margin-top:14px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.6);border-radius:10px;padding:10px 14px;display:inline-block}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.tl-item{text-align:left;position:relative;padding-top:20px}
+.tl-item:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px;background:var(--line)}
+.tl-item.active:before{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.tl-item .n{font-family:var(--display);font-size:12px;font-weight:700;color:var(--accent-deep);letter-spacing:.04em}
+.tl-item h5{font-size:13.5px;font-weight:700;margin:6px 0 4px}
+.tl-item p{font-size:12.5px;color:var(--ink-mute);line-height:1.5}
+
+/* application preview */
+.preview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.pcard{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s}
+.pcard:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);border-color:transparent}
+.pcard .pframe{background:var(--paper-2);padding:22px;border-bottom:1px solid var(--line-soft)}
+.pcard .pchrome{display:flex;gap:5px;margin-bottom:14px}
+.pcard .pchrome i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.pcard .pbody{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow-sm)}
+.pcard .pmeta{padding:22px 24px}
+.pcard .pmeta .icon{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.pcard .pmeta .icon svg{width:18px;height:18px;stroke:var(--accent-deep)}
+.pcard h4{font-size:16.5px;font-weight:600;margin-bottom:6px}
+.pcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+
+/* mini mockups inside preview frames */
+.mini-line{height:8px;border-radius:4px;background:var(--line)}
+.mini-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+.mini-row:last-child{border-bottom:0}
+.mini-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.mini-num{font-family:var(--display);font-weight:600;font-size:34px;color:var(--accent-deep);line-height:1;text-align:center}
+.mini-num-lbl{text-align:center;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-top:4px}
+.mini-ring{width:56px;height:56px;border-radius:50%;background:conic-gradient(var(--accent) 0 40%, var(--accent-2) 40% 68%, var(--accent-3) 68% 85%, var(--zero) 85% 100%);flex:none;position:relative}
+.mini-ring:after{content:"";position:absolute;inset:22%;border-radius:50%;background:var(--card)}
+.mini-bars{display:flex;gap:6px;align-items:flex-end;height:44px}
+.mini-bars i{flex:1;border-radius:4px 4px 0 0}
+
+/* about-tab closing CTA band */
+.lp-final{text-align:center;padding:44px 40px;border-radius:var(--r-xl);background:var(--accent-soft)}
+.lp-final h2{font-size:clamp(22px,3vw,32px);letter-spacing:-.02em;max-width:16ch;margin:0 auto 12px}
+.lp-final p{color:var(--ink-soft);font-size:15px;max-width:44ch;margin:0 auto 24px}
+
+@media(max-width:900px){
+  .about-hero-inner{grid-template-columns:1fr}
+  .lp-illus{order:-1;margin-bottom:10px}
+  .lp-illus svg{max-width:280px}
+  .benefits-grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid,.preview-grid{grid-template-columns:1fr}
+  .timeline{grid-template-columns:repeat(2,1fr)}
+  .why-wrap{padding:28px}
+}
+@media(max-width:560px){
+  .benefits-grid{grid-template-columns:1fr}
+  .timeline{grid-template-columns:1fr}
+  .lp-stats{gap:18px}
+}
+
+/* ================= APPLICATION SHELL ================= */
+.appshell{background:var(--paper)}
+header.apphead{position:sticky;top:0;z-index:30;background:rgba(247,244,238,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);padding:20px 0 0}
+.brandrow{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:12px}
+.dot{width:40px;height:40px;border-radius:12px;background:var(--accent);position:relative;flex:none;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+.dot svg{width:19px;height:19px;stroke:#fff}
+h1{font-family:var(--display);font-size:23px;line-height:1.15;letter-spacing:-.01em;font-weight:600}
+.sub{color:var(--ink-mute);font-size:12.5px;margin-top:3px}
+.credit{text-align:right;font-size:12px;color:var(--ink-mute);max-width:260px}
+.credit strong{display:block;color:var(--ink-soft);font-size:13px}
+
+nav[role="tablist"]{display:flex;gap:4px;margin:22px 0 0;overflow-x:auto}
+nav[role="tablist"] button{display:inline-flex;align-items:center;gap:8px;padding:13px 16px;font-size:13.5px;font-weight:600;color:var(--ink-mute);border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .15s}
+nav[role="tablist"] button svg{width:16px;height:16px;stroke:currentColor;opacity:.7}
+nav[role="tablist"] button:hover{color:var(--ink)}
+nav[role="tablist"] button[aria-selected="true"]{color:var(--accent-deep);border-bottom-color:var(--accent)}
+nav[role="tablist"] button[aria-selected="true"] svg{opacity:1}
+
+main{padding:36px 0 70px}
+section[hidden]{display:none}
+.lead{color:var(--ink-soft);font-size:14.5px;max-width:60ch;margin:0 0 22px}
+.start-panel{display:flex;align-items:center;justify-content:space-between;gap:22px;background:linear-gradient(135deg,var(--accent-soft),var(--card));border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin:0 0 16px;box-shadow:var(--shadow-sm)}
+.start-copy{min-width:0}
+.start-eyebrow{display:inline-block;font-size:10px;letter-spacing:.12em;font-weight:800;color:var(--accent-deep);margin-bottom:5px}
+.start-copy h2{font-size:18px;line-height:1.2;margin:0 0 5px;color:var(--ink)}
+.start-copy p{font-size:12.5px;line-height:1.5;color:var(--ink-mute);margin:0;max-width:58ch}
+.start-actions{display:flex;gap:9px;flex:0 0 auto}
+.start-btn{width:auto;margin:0;padding:11px 15px;font-size:12.5px;white-space:nowrap}
+.start-btn svg{width:15px;height:15px}
+.start-btn.ghost{background:var(--card);color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+
+/* ---------- controls ---------- */
+.searchbar{position:relative;margin-bottom:16px}
+.searchbar input{width:100%;padding:15px 46px 15px 46px;border:1px solid var(--line);border-radius:999px;background:var(--paper);outline:none;font-size:15px;transition:border-color .15s,background .15s}
+.searchbar input:focus{border-color:var(--accent);background:var(--card)}
+.searchbar input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.searchbar svg{position:absolute;left:17px;top:50%;transform:translateY(-50%);opacity:.45;width:17px;height:17px}
+.clearx{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;color:var(--ink-mute);font-size:0}
+.clearx:hover{background:var(--paper-2)}
+.clearx:before{content:"";display:block;width:13px;height:13px;margin:auto;background:currentColor;-webkit-mask:var(--i-x) center/contain no-repeat;mask:var(--i-x) center/contain no-repeat}
+
+.filters{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:14px}
+.chip{padding:8px 15px 8px 12px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;color:var(--ink-soft);background:var(--paper);transition:all .15s;display:inline-flex;align-items:center}
+.chip:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:8px;background:var(--ink-mute)}
+.chip[data-cat="all"]:before{display:none}
+.chip[data-cat="animal"]:before{background:#b0685a} .chip[data-cat="plant"]:before{background:#6d8f5b}
+.chip[data-cat="fruit"]:before{background:#c9636a} .chip[data-cat="veg"]:before{background:#4e8f6a}
+.chip[data-cat="grain"]:before{background:#b98a4e} .chip[data-cat="gf"]:before{background:#c9a24e}
+.chip[data-cat="legume"]:before{background:#7a6ea3} .chip[data-cat="nuts"]:before{background:#8a6a4e}
+.chip[data-cat="dairy"]:before{background:#6a93b0} .chip[data-cat="bev"]:before{background:#5c9ab0}
+.chip[data-cat="baking"]:before{background:#c98a6a} .chip[data-cat="spice"]:before{background:#b06a8a}
+.chip[data-cat="oil"]:before{background:#c9b24e} .chip[data-cat="prep"]:before{background:#8a8a8a}
+.chip:hover{border-color:var(--ink-mute)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.toolrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 14px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.count{font-size:12.5px;color:var(--ink-mute)}
+.count b{color:var(--ink);font-weight:700}
+.toolright{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper);padding:3px}
+.seg button{padding:7px 13px;font-size:12.5px;color:var(--ink-mute);border-radius:999px}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);font-weight:700;box-shadow:var(--shadow-sm)}
+label.sortl{font-size:12.5px;color:var(--ink-mute);display:inline-flex;align-items:center;gap:7px}
+select{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);font-size:12.5px}
+
+/* ---------- food list ---------- */
+.list{display:grid;gap:10px}
+.row{display:grid;grid-template-columns:1fr 74px 74px auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;text-align:left;width:100%;transition:border-color .18s,transform .18s,box-shadow .18s}
+.row:hover{border-color:transparent;transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.row .nm{font-family:var(--list-font);font-weight:650;font-size:14.5px;letter-spacing:-.01em}
+.row .mt{font-family:var(--list-font);font-size:12px;color:var(--ink-mute);margin-top:3px;letter-spacing:.005em}
+.stat{text-align:center}
+.stat .v{font-family:var(--list-font);font-size:20px;font-weight:650;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat .k{font-family:var(--list-font);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-top:4px;font-weight:600}
+.tag{display:inline-flex;align-items:center;padding:5px 11px 5px 8px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.tag:before{content:"";display:inline-block;width:10px;height:10px;margin-right:5px;background:currentColor;-webkit-mask:var(--i-leaf) center/contain no-repeat;mask:var(--i-leaf) center/contain no-repeat}
+.t-low{background:var(--low-bg);color:var(--low)}
+.t-mid{background:var(--mid-bg);color:var(--mid)} .t-mid:before{-webkit-mask-image:var(--i-gauge);mask-image:var(--i-gauge)}
+.t-high{background:var(--high-bg);color:var(--high)} .t-high:before{-webkit-mask-image:var(--i-flame);mask-image:var(--i-flame)}
+.t-zero{background:var(--zero-bg);color:var(--zero)} .t-zero:before{-webkit-mask-image:var(--i-dash);mask-image:var(--i-dash)}
+.hdr{display:grid;grid-template-columns:1fr 74px 74px auto;gap:14px;padding:0 18px 8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute)}
+.hdr span:nth-child(2),.hdr span:nth-child(3){text-align:center}
+.empty{text-align:center;padding:56px 20px;color:var(--ink-mute);background:var(--card);border:1px dashed var(--line);border-radius:var(--r-lg)}
+.empty:before{content:"";display:block;width:42px;height:42px;margin:0 auto 16px;opacity:.4;background:var(--ink-mute)}
+#list .empty:before{-webkit-mask:var(--i-noresult) center/contain no-repeat;mask:var(--i-noresult) center/contain no-repeat}
+#mealitems .empty:before{-webkit-mask:var(--i-plate) center/contain no-repeat;mask:var(--i-plate) center/contain no-repeat}
+.more{display:block;width:100%;padding:15px;margin-top:12px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:13px;color:var(--ink-soft);font-weight:600}
+.more[hidden]{display:none}
+.more:hover{border-color:var(--accent);color:var(--accent-deep)}
+.more:before{content:"";display:inline-block;width:11px;height:11px;background:currentColor;-webkit-mask:var(--i-chevron) center/contain no-repeat;mask:var(--i-chevron) center/contain no-repeat;margin-right:7px;vertical-align:-1px}
+
+/* ---------- calculator ---------- */
+.calcgrid{display:grid;grid-template-columns:.85fr 1.15fr;gap:22px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;box-shadow:var(--shadow-sm)}
+.card h3{font-family:var(--display);font-size:18px;margin:0 0 4px;font-weight:600}
+.card .hint{font-size:12.5px;color:var(--ink-mute);margin:0 0 18px}
+.field{margin-bottom:18px}
+.field>label{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:7px;font-weight:700}
+.field select,.field input[type=number]{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--paper);font-size:14.5px}
+.gramrow{display:flex;gap:10px;align-items:center}
+.gramrow input{flex:1}
+.unit{font-size:13px;color:var(--ink-mute)}
+input[type=range]{width:100%;accent-color:var(--accent);margin-top:12px;height:6px}
+.presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.presets button{padding:7px 13px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--ink-soft);background:var(--paper);transition:border-color .15s}
+.presets button:hover{border-color:var(--accent);color:var(--accent-deep)}
+.hero-metric{position:relative;text-align:center;padding:14px 0 20px;background:linear-gradient(160deg,var(--accent-soft),transparent 70%);border-radius:var(--r-lg);margin:-4px -4px 4px}
+.readout{text-align:center;padding:22px 0 16px}
+.readout .big{font-family:var(--display);font-size:76px;line-height:1;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:transform .25s ease}
+.readout .big.pulse{animation:pulse .4s ease}
+@keyframes pulse{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+.readout .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);margin-top:10px;font-weight:600}
+.bar{position:relative;height:10px;border-radius:99px;overflow:visible;margin:20px 0 8px;display:flex}
+.bar i{display:block;height:100%}
+.bar i:first-child{border-radius:99px 0 0 99px}
+.bar i:last-child{border-radius:0 99px 99px 0}
+.bar-marker{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--ink);transform:translate(-50%,-50%);left:0;box-shadow:var(--shadow-sm);transition:left .35s cubic-bezier(.2,.8,.2,1)}
+.barlbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-mute);font-weight:600}
+.kv{display:grid;grid-template-columns:1fr auto;gap:8px 12px;font-size:13.5px;border-top:1px solid var(--line-soft);padding-top:16px;margin-top:18px}
+.kv dt{color:var(--ink-mute)} .kv dd{margin:0;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.swaps{margin-top:18px;border-top:1px solid var(--line-soft);padding-top:16px}
+.swaps h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);margin:0 0 11px;font-weight:700}
+.swap{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;font-size:13.5px;border-radius:14px;background:var(--low-bg);margin-bottom:8px}
+.swap:last-child{margin-bottom:0}
+.swap b{font-weight:700} .swap span{color:var(--low);font-size:12.5px;font-weight:700;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 20px;border-radius:999px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;width:100%;margin-top:18px;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);font-weight:600;box-shadow:none}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent-deep);transform:none}
+
+/* ---------- meal ---------- */
+.mealgrid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+.mealitem{display:grid;grid-template-columns:22px 1fr 78px 62px 30px;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--line-soft)}
+.mealitem:last-child{border-bottom:0}
+.mealitem:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);align-self:center}
+.mealitem .nm{font-weight:700;font-size:14px}
+.mealitem .mt{font-size:11.5px;color:var(--ink-mute)}
+.mealitem input{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:11px;background:var(--paper);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.mealitem .gl{text-align:right;font-family:var(--display);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.del{width:28px;height:28px;border-radius:9px;color:var(--ink-mute);font-size:0}
+.del:before{content:"";display:block;width:14px;height:14px;margin:auto;background:currentColor;-webkit-mask:var(--i-trash) center/contain no-repeat;mask:var(--i-trash) center/contain no-repeat}
+.del:hover{background:var(--high-bg);color:var(--high)}
+.total{position:sticky;top:100px}
+.ring-wrap{display:flex;justify-content:center;margin-bottom:6px}
+.ring{width:120px;height:120px;border-radius:50%;position:relative;background:conic-gradient(var(--line) 0 100%);transition:background 1s ease}
+.ring:after{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--card)}
+.verdict{padding:16px;border-radius:16px;font-size:13.5px;line-height:1.5;margin-top:16px;display:flex;gap:10px;align-items:flex-start}
+.verdict[hidden]{display:none}
+.verdict svg{width:18px;height:18px;flex:none;margin-top:1px}
+.addbox{display:flex;gap:9px;margin-bottom:8px}
+.addbox select{flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.addbox button{padding:0 20px;border-radius:14px;background:var(--accent);color:#fff;font-weight:700;box-shadow:var(--shadow-sm)}
+
+/* ---------- reference ---------- */
+.refgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.refgrid .card h3{display:flex;align-items:center;gap:10px;font-size:18px;margin-bottom:12px}
+.refgrid .card h3 svg{width:20px;height:20px}
+.refgrid .card:nth-child(1) h3 svg{stroke:var(--accent-deep)} .refgrid .card:nth-child(2) h3 svg{stroke:#93701e}
+.scale{display:grid;gap:9px;margin-top:14px}
+.scale div{display:flex;justify-content:space-between;padding:11px 14px;border-radius:12px;font-size:13px;font-weight:600}
+.note{font-size:12.5px;color:var(--ink-mute);line-height:1.65;margin-top:16px}
+.ref-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:6px}
+.ref-tl{border-radius:16px;padding:18px 16px;background:var(--paper)}
+.ref-tl .icon{width:34px;height:34px;border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.ref-tl .icon svg{width:17px;height:17px;stroke:var(--accent-deep)}
+.ref-tl h5{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.ref-tl p{font-size:12.5px;color:var(--ink-mute);line-height:1.5}
+footer.appfoot{border-top:1px solid var(--line-soft);padding:24px 0 46px;font-size:11.5px;color:var(--ink-mute);line-height:1.65;margin-top:20px}
+
+@media(max-width:820px){
+  .start-panel{align-items:flex-start;flex-direction:column}
+  .start-actions{width:100%;flex-wrap:wrap}
+  .start-btn{flex:1 1 180px}
+  .calcgrid,.mealgrid,.refgrid,.ref-timeline{grid-template-columns:1fr}
+  .total{position:static}
+  .row,.hdr{grid-template-columns:1fr 58px 58px;grid-template-areas:"n gi gl" "t t t"}
+  .row .nmwrap{grid-area:n} .row .tagwrap{grid-area:t;margin-top:6px}
+  .hdr span:nth-child(4){display:none}
+  .readout .big{font-size:52px}
+  h1{font-size:20px} .credit{text-align:left}
+  .mealitem{grid-template-columns:14px 1fr 64px 52px 26px}
+}
+@media print{
+  nav,.searchbar,.filters,.toolrow,.btn,.addbox,.del,.noprint,.about-hero,.lp-section,.lp-final{display:none!important}
+  body{background:#fff;font-size:12px}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  section[hidden]{display:none!important}
+}
+
+/* ===== Food Cards ===== */
+.cards-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px 24px;margin:0 0 16px;background:linear-gradient(135deg,var(--accent-soft),var(--card));border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.cards-eyebrow{display:block;font-size:10px;font-weight:800;letter-spacing:.13em;color:var(--accent-deep);margin-bottom:6px}
+.cards-hero h2{margin:0 0 6px;font-size:21px;color:var(--ink)}
+.cards-hero p{margin:0;color:var(--ink-mute);font-size:13px;max-width:65ch;line-height:1.5}
+.cards-hero-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
+.cards-status{display:flex;align-items:center;gap:9px;margin:0 0 14px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:12px;color:var(--ink-mute)}
+.cards-status strong{font-size:16px;color:var(--accent-deep)}
+.selected-cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.selected-card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.selected-card-bar{height:13px}
+.selected-card-body{padding:17px 18px 16px}
+.selected-card-cat{font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:7px}
+.selected-card-name{font-family:Georgia,serif;font-size:20px;font-weight:800;letter-spacing:-.01em;color:var(--ink);padding-right:28px;margin-bottom:13px}
+.selected-card-metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.selected-card-metric{padding:10px 11px;background:var(--paper-2);border:1px solid var(--line-soft);border-radius:10px}
+.selected-card-metric small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--ink-mute)}
+.selected-card-metric b{display:block;font-size:18px;color:var(--ink);margin-top:2px}
+.selected-card-meta{display:flex;justify-content:space-between;gap:8px;margin-top:11px;font-size:11px;color:var(--ink-soft)}
+.selected-card-level{display:inline-flex;margin-top:11px;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.selected-card-remove{position:absolute;right:12px;top:14px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink-mute);cursor:pointer;font-weight:800}
+.selected-card-remove:hover{color:var(--high);border-color:var(--high)}
+.cards-empty{text-align:center;padding:52px 20px;margin-top:16px;border:1px dashed var(--line);border-radius:16px;background:var(--paper-2)}
+.cards-empty.hidden{display:none}
+.cards-empty-icon{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;background:var(--accent-soft);color:var(--accent);font-size:22px}
+.cards-empty h3{margin:0 0 7px;color:var(--ink)}
+.cards-empty p{margin:0 auto 18px;max-width:560px;color:var(--ink-mute);font-size:13px}
+.add-to-cards{display:inline-flex;align-items:center;justify-content:center;margin-top:8px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--accent-deep);font-size:10px;font-weight:800;cursor:pointer}
+.add-to-cards:hover{border-color:var(--accent);background:var(--accent-soft)}
+.row .add-to-cards{grid-column:1/-1;justify-self:start}
+@media(max-width:900px){.selected-cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cards-hero{align-items:flex-start;flex-direction:column}.cards-hero-actions{justify-content:flex-start}}
+@media(max-width:600px){.selected-cards-grid{grid-template-columns:1fr}.cards-hero-actions{width:100%}.cards-hero-actions .btn{flex:1}.cards-status{flex-wrap:wrap}}
+@media print{
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  /* Hide the entire application while printing Food Cards. */
+  body.print-food-cards > *:not(#foodCardsPrintArea){
+    display:none!important;
+  }
+
+  /* Make the generated cards the ONLY printable content. */
+  body.print-food-cards #foodCardsPrintArea{
+    display:grid!important;
+    position:static!important;
+    visibility:visible!important;
+    width:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+    color:#1f2a25!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea *{
+    visibility:visible!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  @page{
+    size:letter;
+    margin:8mm;
+  }
+}
+
+
+/* Force Food Cards to print in full color */
+@media print {
+  html, body,
+  body.print-food-cards,
+  body.print-food-cards #foodCardsPrintArea,
+  body.print-food-cards #foodCardsPrintArea * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea {
+    color: #1f2a25 !important;
+    background: #ffffff !important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea .pfc {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: #ffffff !important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea .pfcbar {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea .pfcmetric {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.print-food-cards #foodCardsPrintArea .pfclevel {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color: #ffffff !important;
+  }
+}
+
+.level-filter-label{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--ink-mute);text-transform:uppercase;margin-right:2px}
+
+/* ===== HIGH-CONTRAST FOOD CARD LEVEL COLORS =====
+   Green = Low GL | Yellow = Medium GL | Red = High GL
+   Designed for fast recognition and better accessibility.
+*/
+.selected-card{
+  border:2px solid var(--card-level-border,#d5ddd8);
+}
+.selected-card.level-low{
+  border-color:#16803a;
+  background:#f3fff6;
+}
+.selected-card.level-mid{
+  border-color:#d99b00;
+  background:#fffbea;
+}
+.selected-card.level-high{
+  border-color:#c62828;
+  background:#fff5f5;
+}
+.selected-card-bar.level-low{background:#16803a !important}
+.selected-card-bar.level-mid{background:#e0a800 !important}
+.selected-card-bar.level-high{background:#c62828 !important}
+
+.selected-card.level-low .selected-card-metric{background:#e8f7ec;border-color:#b9e2c4}
+.selected-card.level-mid .selected-card-metric{background:#fff3c4;border-color:#efd77a}
+.selected-card.level-high .selected-card-metric{background:#ffe1e1;border-color:#efb1b1}
+
+.selected-card-level.level-low{
+  background:#16803a !important;color:#fff !important;border:0;
+}
+.selected-card-level.level-mid{
+  background:#e0a800 !important;color:#1d1d1d !important;border:0;
+}
+.selected-card-level.level-high{
+  background:#c62828 !important;color:#fff !important;border:0;
+}
+
+.selected-card .selected-card-cat{
+  font-weight:900;
+}
+.selected-card .selected-card-name{
+  color:#17231d;
+}
+
+
+/* Food Cards print area stays out of the normal app layout. */
+#foodCardsPrintArea{
+  display:none;
+}
+
+
+/* ===== SIMPLE MEAL BUILDER ===== */
+.simple-meal-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,.8fr);gap:18px}
+.simple-meal-head{margin-bottom:16px}
+.simple-step{display:block;font-size:10px;font-weight:900;letter-spacing:.13em;color:var(--accent-deep);margin-bottom:5px}
+.simple-meal-head h3,.simple-summary h3{margin:0 0 5px;color:var(--ink)}
+.simple-meal-head .hint{margin:0}
+.simple-addbox{display:flex;gap:10px;margin-bottom:18px}
+.simple-addbox select{flex:1;min-width:0}
+.simple-addbox .btn{white-space:nowrap}
+.simple-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:40px 15px;border:1px dashed var(--line);border-radius:14px;background:var(--paper-2);color:var(--ink-mute);text-align:center}
+.simple-empty-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-deep);font-size:23px;font-weight:700;margin-bottom:4px}
+.simple-empty strong{color:var(--ink);font-size:15px}
+.simple-empty span{font-size:12px}
+.simple-summary{display:flex;flex-direction:column}
+.simple-total-number{text-align:center;font-size:54px;line-height:1;font-weight:800;color:var(--accent-deep);margin:18px 0 4px}
+.simple-total-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--ink-mute)}
+.simple-summary-list{border-top:1px solid var(--line);margin-top:5px}
+.simple-summary-list div{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.simple-summary-list span{color:var(--ink-mute)}
+.simple-summary-list strong{color:var(--ink)}
+.simple-clear{margin-top:auto}
+.mealitem{display:grid;grid-template-columns:minmax(0,1fr) 86px 58px 30px;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line-soft)}
+.mealitem .nm{font-weight:800;color:var(--ink);font-size:14px}
+.mealitem .mt{font-size:11px;color:var(--ink-mute);margin-top:3px}
+.mealitem input{width:100%;text-align:center}
+.mealitem .gl{text-align:right;font-weight:800;font-size:14px}
+.mealitem .del{width:30px;height:30px;border:0;background:transparent;color:var(--ink-mute);font-size:20px;cursor:pointer;border-radius:50%}
+.mealitem .del:hover{background:var(--high-bg);color:var(--high)}
+@media(max-width:850px){.simple-meal-grid{grid-template-columns:1fr}.simple-clear{margin-top:18px}}
+@media(max-width:600px){.simple-addbox{flex-direction:column}.mealitem{grid-template-columns:minmax(0,1fr) 78px 45px 28px;gap:8px}}
+
+
+/* ===== FINAL MEAL BUILDER OVERRIDES =====
+   These rules intentionally come last so the older meal-builder styles
+   cannot distort the simplified layout.
+*/
+#tab-meal .simple-addbox{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  width:100%!important;
+}
+#tab-meal #mfood{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  height:46px!important;
+  padding:0 14px!important;
+  border:1px solid var(--line)!important;
+  border-radius:12px!important;
+  background:var(--paper)!important;
+  color:var(--ink)!important;
+  font-size:13px!important;
+}
+#tab-meal #madd{
+  height:46px!important;
+  padding:0 22px!important;
+  white-space:nowrap!important;
+}
+#tab-meal #mealitems{
+  display:block!important;
+  width:100%!important;
+}
+#tab-meal .mealitem{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 86px 54px 34px!important;
+  align-items:center!important;
+  gap:12px!important;
+  width:100%!important;
+  min-height:64px!important;
+  padding:13px 4px!important;
+  margin:0!important;
+  border-top:1px solid var(--line-soft)!important;
+  border-bottom:0!important;
+}
+#tab-meal .mealitem:before{display:none!important}
+#tab-meal .mealitem .nmwrap{min-width:0!important}
+#tab-meal .mealitem .nm{
+  font-weight:800!important;
+  font-size:14px!important;
+  color:var(--ink)!important;
+  line-height:1.2!important;
+}
+#tab-meal .mealitem .mt{
+  font-size:11px!important;
+  color:var(--ink-mute)!important;
+  margin-top:3px!important;
+}
+#tab-meal .mealitem input{
+  width:86px!important;
+  height:38px!important;
+  padding:8px 9px!important;
+  text-align:center!important;
+  box-sizing:border-box!important;
+}
+#tab-meal .mealitem .gl{
+  text-align:right!important;
+  font-size:15px!important;
+  font-weight:800!important;
+}
+#tab-meal .mealitem .del{
+  width:30px!important;
+  height:30px!important;
+  padding:0!important;
+}
+#tab-meal .simple-empty[hidden]{display:none!important}
+#tab-meal .simple-empty{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#tab-meal .simple-summary .verdict{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:600px){
+  #tab-meal .simple-addbox{grid-template-columns:1fr!important}
+  #tab-meal #madd{width:100%!important}
+  #tab-meal .mealitem{
+    grid-template-columns:minmax(0,1fr) 74px 44px 30px!important;
+    gap:8px!important;
+  }
+  #tab-meal .mealitem input{width:74px!important}
+}
+
+
+/* ===== MEAL BUILDER POLISH ===== */
+#tab-meal .simple-addbox{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 132px!important;
+  gap:10px!important;
+  align-items:center!important;
+}
+#tab-meal #madd{
+  width:132px!important;
+  height:46px!important;
+  border-radius:23px!important;
+  padding:0 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#tab-meal .mealitem{
+  grid-template-columns:minmax(0,1fr) 86px 76px 34px!important;
+  min-height:72px!important;
+  padding:14px 4px!important;
+}
+#tab-meal .mealitem .portion{
+  display:block!important;
+  font-size:10px!important;
+  color:var(--ink-mute)!important;
+  margin-top:2px!important;
+}
+#tab-meal .mealitem .glbox{
+  text-align:center!important;
+  line-height:1.05!important;
+}
+#tab-meal .mealitem .glbox b{
+  display:block!important;
+  font-size:15px!important;
+  font-weight:900!important;
+}
+#tab-meal .mealitem .glbox span{
+  display:block!important;
+  margin-top:3px!important;
+  font-size:9px!important;
+  color:var(--ink-mute)!important;
+  text-transform:uppercase!important;
+  letter-spacing:.06em!important;
+}
+#tab-meal .mealitem .del{
+  font-size:0!important;
+  position:relative!important;
+}
+#tab-meal .mealitem .del:after{
+  content:"×"!important;
+  font-size:20px!important;
+  line-height:30px!important;
+}
+#tab-meal .simple-total-number{
+  margin:20px 0 2px!important;
+}
+#tab-meal .simple-total-label{
+  white-space:nowrap!important;
+}
+#tab-meal .simple-summary .tag{
+  font-weight:800!important;
+}
+@media(max-width:600px){
+  #tab-meal .simple-addbox{grid-template-columns:1fr!important}
+  #tab-meal #madd{width:100%!important}
+  #tab-meal .mealitem{
+    grid-template-columns:minmax(0,1fr) 74px 60px 30px!important;
+  }
+}
+
+
+/* ===== MEAL BUILDER FINAL CLARITY ===== */
+#tab-meal .simple-addbox{grid-template-columns:minmax(0,1fr) 132px!important}
+#tab-meal #madd{border-radius:24px!important;min-width:132px!important;border:0!important}
+#tab-meal .gramsbox{display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important}
+#tab-meal .gramsbox label{font-size:8px!important;font-weight:900!important;letter-spacing:.08em!important;color:var(--ink-mute)!important}
+#tab-meal .gramsbox input{width:86px!important}
+#tab-meal .mealitem{grid-template-columns:minmax(0,1fr) 90px 105px 30px!important}
+#tab-meal .glbox span{white-space:nowrap!important;font-size:8px!important;font-weight:800!important}
+@media(max-width:600px){
+  #tab-meal .simple-addbox{grid-template-columns:1fr!important}
+  #tab-meal #madd{width:100%!important}
+  #tab-meal .mealitem{grid-template-columns:minmax(0,1fr) 76px 80px 28px!important}
+  #tab-meal .gramsbox input{width:76px!important}
+}
+
+
+/* Clear zero/unknown GL presentation */
+#tab-meal .glbox b{min-width:20px}
+#tab-meal .glbox b[title]{cursor:help}
+#tab-meal .glbox span{line-height:1.15}
+
+
+/* ============================================================
+   MOCKUP-INSPIRED VISUAL REFRESH
+   Warm ivory + forest green + strong traffic-light GL colors.
+   No functional changes.
+   ============================================================ */
+body{background:#faf9f4;color:#18362a}
+.appshell{background:#faf9f4}
+header.apphead{
+  background:rgba(250,249,244,.96);
+  border-bottom:1px solid #dfe7e1;
+  padding-top:22px;
+}
+.dot{background:#287b59;border-radius:12px}
+h1{color:#173b2c;font-weight:650}
+.sub{color:#718078}
+nav[role="tablist"] button{color:#738079}
+nav[role="tablist"] button[aria-selected="true"]{
+  color:#075b3b;
+  border-bottom-color:#188a45;
+}
+main{padding-top:34px}
+.lead{color:#40564b}
+.start-panel{
+  background:linear-gradient(110deg,#e8f3ec 0%,#fdfcf8 72%);
+  border-color:#d8e5dc;
+  border-radius:28px;
+}
+.start-eyebrow,.cards-eyebrow,.simple-step{color:#075b3b}
+.start-copy h2,.cards-hero h2,.simple-meal-head h3,.simple-summary h3{color:#173b2c}
+.btn{
+  background:#287b59;
+  color:#fff;
+  border-color:#287b59;
+}
+.btn:hover{background:#176f4b}
+.start-btn.ghost,.btn.ghost{
+  background:#fff;
+  color:#315448;
+  border-color:#d8e3dc;
+}
+.start-btn:not(.ghost),#madd,#addFromCalc,#printFoodCards{
+  background:#287b59;
+  color:#fff;
+}
+.panel,.card,.row,.cards-status,.selected-card{
+  background:#fff;
+  border-color:#d8e3dc;
+}
+.panel{border-radius:28px}
+.searchbar input,.field select,.field input[type=number],select,.mealitem input{
+  background:#f7f9f6;
+  border-color:#d8e3dc;
+}
+.searchbar input:focus,.field select:focus,.field input[type=number]:focus{
+  border-color:#287b59;
+  background:#fff;
+}
+.chip{
+  background:#f8faf7;
+  border-color:#d8e3dc;
+  color:#40564b;
+}
+.chip[aria-pressed="true"]{
+  background:#193a2e;
+  border-color:#193a2e;
+  color:#fff;
+}
+.toolrow{border-top-color:#e1e9e3}
+.seg{background:#f5f8f4;border-color:#d8e3dc}
+.seg button[aria-pressed="true"]{
+  background:#fff;
+  color:#18362a;
+}
+.row{
+  border-radius:20px;
+  padding:18px 20px;
+}
+.row:hover{
+  border-color:#b9d2c3;
+  box-shadow:0 12px 30px -20px rgba(7,91,59,.35);
+}
+.row .nm{color:#173b2c}
+.stat .v{color:#18362a}
+.tag{font-weight:850}
+.t-low{background:#dff3e6;color:#188a45}
+.t-mid{background:#fff0c7;color:#d18e00}
+.t-high{background:#ffdede;color:#d22c2c}
+.t-zero{background:#edf1ee;color:#718078}
+.more{background:#fff;border-color:#d8e3dc}
+.cards-hero{
+  background:linear-gradient(110deg,#e8f3ec 0%,#fdfcf8 72%);
+  border-color:#d8e5dc;
+}
+.cards-status{background:#fff}
+.selected-card.level-low{border-color:#188a45;background:#f3fff6}
+.selected-card.level-mid{border-color:#e5a000;background:#fffdf2}
+.selected-card.level-high{border-color:#d22c2c;background:#fff7f7}
+.selected-card-bar.level-low{background:#188a45!important}
+.selected-card-bar.level-mid{background:#e5a000!important}
+.selected-card-bar.level-high{background:#d22c2c!important}
+.selected-card.level-low .selected-card-metric{background:#e5f5ea;border-color:#bfe3ca}
+.selected-card.level-mid .selected-card-metric{background:#fff2c9;border-color:#efd783}
+.selected-card.level-high .selected-card-metric{background:#ffe3e3;border-color:#efb5b5}
+.selected-card-level.level-low{background:#188a45!important;color:#fff!important}
+.selected-card-level.level-mid{background:#e5a000!important;color:#fff!important}
+.selected-card-level.level-high{background:#d22c2c!important;color:#fff!important}
+.hero-metric,.simple-summary .simple-total-number{color:#173b2c}
+input[type=range]{accent-color:#287b59}
+.bar i:nth-child(1){background:#188a45!important}
+.bar i:nth-child(2){background:#e5a000!important}
+.bar i:nth-child(3){background:#d22c2c!important}
+.simple-empty{background:#edf4ef;border-color:#cfded5}
+.simple-empty-icon{background:#e4f1e9;color:#075b3b}
+.verdict{border-color:transparent}
+.refgrid .card,.about-hero{background:#fff}
+.scale>div:nth-child(1){background:#e3f5e9!important;color:#188a45!important}
+.scale>div:nth-child(2){background:#fff1c9!important;color:#d18e00!important}
+.scale>div:nth-child(3){background:#ffe0e0!important;color:#d22c2c!important}
+
+/* Color GI/GL values according to the same strong visual language. */
+.row .tagwrap{position:relative}
+.row:has(.t-low) .stat .v{color:#188a45}
+.row:has(.t-mid) .stat .v{color:#d18e00}
+.row:has(.t-high) .stat .v{color:#d22c2c}
+
+@media(max-width:700px){
+  .wrap{padding:0 16px}
+  header.apphead{padding-top:16px}
+  main{padding-top:24px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- APPLICATION (Food Index / Calculator / Meal Builder / Reference / About) -->
+<!-- ============================================================ -->
+<div class="appshell" id="app-start">
+<div class="wrap">
+
+<header class="apphead">
+  <div class="brandrow">
+    <div class="mark">
+      <div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 L17 13 A5 6 0 1 1 7 13 Z" transform="rotate(38 12 12)"/></svg></div>
+      <div>
+        <h1>Glycemic Index &amp; Load Companion</h1>
+        <div class="sub"><span id="foodCount"></span> foods · <span id="catCount"></span> categories · works offline, no account needed</div>
+      </div>
+    </div>
+    <div class="credit" id="credit"></div>
+  </div>
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-tab="index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Food Index</button>
+    <button role="tab" aria-selected="false" data-tab="cards">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/>
+      </svg>Food Cards
+    </button>
+    <button role="tab" aria-selected="false" data-tab="calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="8" y2="12"/><line x1="12" y1="12" x2="12" y2="12"/><line x1="16" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="12" y1="16" x2="12" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>Portion Calculator</button>
+    <button role="tab" aria-selected="false" data-tab="meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a3 3 0 0 0 6 0V3M9 10v11M18 3c-2 2-2 5-2 7 0 1.5 1 2 2 2s2-.5 2-2c0-2 0-5-2-7ZM18 12v9"/></svg>Meal Builder</button>
+    <button role="tab" aria-selected="false" data-tab="ref"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h9l5 5v10.5"/><path d="M6 20h13"/><path d="M9 8h4M9 12h6"/></svg>How to Read It</button>
+    <button role="tab" aria-selected="false" data-tab="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r="1"/></svg>About</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============ FOOD INDEX ============ -->
+<section id="tab-index">
+  <p class="lead">Search the full database, filter by category or glycemic level, then size a portion or build a meal.</p>
+  <div class="start-panel">
+    <div class="start-copy">
+      <span class="start-eyebrow">START HERE</span>
+      <h2>Go beyond a food chart.</h2>
+      <p>See how portion size changes glycemic load — or build your whole plate and see the estimated total.</p>
+    </div>
+    <div class="start-actions">
+      <button class="btn start-btn cta-goto" data-goto="calc" type="button">
+        Calculate a portion
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <button class="btn start-btn ghost cta-goto" data-goto="meal" type="button">
+        Build a meal
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="searchbar">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search a food — try “rice”, “yogurt”, “lentils”…" autocomplete="off">
+      <button class="clearx" id="clearq" hidden aria-label="Clear">×</button>
+    </div>
+    <div class="filters" id="cats"></div>
+    <div class="toolrow">
+      <div class="count" id="count"></div>
+      <div class="toolright">
+        <span class="level-filter-label">GL</span>
+        <div class="seg" id="levels">
+          <button data-lv="all" aria-pressed="true">All</button>
+          <button data-lv="low" aria-pressed="false">Low</button>
+          <button data-lv="mid" aria-pressed="false">Medium</button>
+          <button data-lv="high" aria-pressed="false">High</button>
+        </div>
+        <label class="sortl">Sort
+          <select id="sort">
+            <option value="az">A – Z</option>
+            <option value="gi-">Lowest GI</option>
+            <option value="gi+">Highest GI</option>
+            <option value="gl-">Lowest GL</option>
+            <option value="gl+">Highest GL</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="hdr"><span>Food</span><span>GI</span><span>GL</span><span>Rating</span></div>
+  <div class="list" id="list"></div>
+  <button class="more" id="more" hidden>Show more foods</button>
+</section>
+
+<!-- ============ CALCULATOR ============ -->
+
+<!-- ============ FOOD CARDS ============ -->
+<section id="tab-cards" hidden>
+  <p class="lead">Create your own colorful food reference cards. Pick the foods you want, then print a clean 2 × 3 sheet to keep handy.</p>
+
+  <div class="cards-hero">
+    <div>
+      <span class="cards-eyebrow">YOUR FOOD CARD COLLECTION</span>
+      <h2>Choose the foods you want to keep handy.</h2>
+      <p>Category colors make foods easy to recognize. GI and GL stay visually separate so the information remains clear.</p>
+    </div>
+    <div class="cards-hero-actions">
+      <button class="btn ghost" id="cardsSelectAll" type="button">Select all</button>
+      <button class="btn ghost" id="cardsClear" type="button">Clear</button>
+      <button class="btn" id="printFoodCards" type="button">Print Food Cards</button>
+    </div>
+  </div>
+
+  <div style="font-size:12px;color:var(--ink-mute);margin:-5px 0 14px">2 × 3 cards per page &nbsp;•&nbsp; Print and cut along the dashed lines</div>
+
+  <div class="cards-status">
+    <strong id="selectedCardsCount">0</strong> foods selected
+    <span>·</span>
+    <span>Cards are saved on this device.</span>
+  </div>
+
+  <div id="selectedCardsGrid" class="selected-cards-grid"></div>
+
+  <div id="cardsEmpty" class="cards-empty">
+    <div class="cards-empty-icon">✦</div>
+    <h3>Your Food Cards will appear here</h3>
+    <p>Go to the Food Index and click <strong>＋ Add to Cards</strong> beside any food you want to print.</p>
+    <button class="btn" id="cardsGoIndex" type="button">Browse Food Index</button>
+  </div>
+</section>
+
+<section id="tab-calc" hidden>
+  <p class="lead">A chart gives you one fixed number. Real portions are never fixed. Pick a food, set the amount you are actually eating, and see the glycemic load of <em>that</em> portion.</p>
+  <div class="calcgrid">
+    <div class="card">
+      <h3>Your portion</h3>
+      <p class="hint">Glycemic load = GI × available carbohydrate ÷ 100.</p>
+      <div class="field">
+        <label for="cfood">Food</label>
+        <select id="cfood"></select>
+      </div>
+      <div class="field">
+        <label for="cgrams">Amount</label>
+        <div class="gramrow"><input id="cgrams" type="number" min="1" max="1000" step="1" value="100"><span class="unit">grams</span></div>
+        <input id="cslider" type="range" min="5" max="500" step="5" value="100">
+        <div class="presets" id="presets"></div>
+      </div>
+      <button class="btn" id="addFromCalc">Add this portion to my meal</button>
+    </div>
+    <div class="card">
+      <div class="hero-metric">
+        <div class="readout">
+          <div class="big" id="cgl">—</div>
+          <div class="lbl">Glycemic load of this portion</div>
+        </div>
+        <div style="text-align:center"><span class="tag" id="ctag">—</span></div>
+      </div>
+      <div class="bar"><i style="flex:10;background:var(--low)"></i><i style="flex:10;background:var(--mid)"></i><i style="flex:10;background:var(--high)"></i><div class="bar-marker" id="glMarker"></div></div>
+      <div class="barlbl"><span>Low 0–10</span><span>Medium 11–19</span><span>High 20+</span></div>
+      <dl class="kv">
+        <dt>Glycemic index</dt><dd id="cgi">—</dd>
+        <dt>Available carbs in portion</dt><dd id="ccarb">—</dd>
+        <dt>Carbs per 100 g</dt><dd id="cper100">—</dd>
+        <dt>Category</dt><dd id="ccat">—</dd>
+      </dl>
+      <div class="swaps" id="swapbox" hidden>
+        <h4>Lower-GI swaps in the same category</h4>
+        <div id="swaplist"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEAL BUILDER ============ -->
+<section id="tab-meal" hidden>
+  <p class="lead">Add the foods on your plate. Adjust the grams and the total glycemic load updates automatically.</p>
+
+  <div class="simple-meal-grid">
+    <div class="card">
+      <div class="simple-meal-head">
+        <div>
+          <span class="simple-step">STEP 1</span>
+          <h3>Add foods to your plate</h3>
+          <p class="hint">Choose a food, then click <strong>Add food</strong>.</p>
+        </div>
+      </div>
+
+      <div class="simple-addbox">
+        <select id="mfood" aria-label="Choose a food"></select>
+        <button class="btn" id="madd" type="button">＋ Add food</button>
+      </div>
+
+      <div id="mealitems"></div>
+
+      <div id="mealEmpty" class="simple-empty">
+        <div class="simple-empty-icon">＋</div>
+        <strong>Your plate is empty</strong>
+        <span>Add a food above to start.</span>
+      </div>
+    </div>
+
+    <div class="card simple-summary">
+      <span class="simple-step">STEP 2</span>
+      <h3>Your meal total</h3>
+
+      <div class="simple-total-number" id="mgl">0</div>
+      <div class="simple-total-label">TOTAL MEAL GLYCEMIC LOAD</div>
+      <div style="text-align:center;margin:12px 0 18px">
+        <span class="tag" id="mtag">Empty plate</span>
+      </div>
+
+      <div class="simple-summary-list">
+        <div><span>Foods</span><strong id="mcount">0</strong></div>
+        <div><span>Available carbs</span><strong id="mcarb">0 g</strong></div>
+        <div><span>Total weight</span><strong id="mweight">0 g</strong></div>
+      </div>
+
+      <div class="verdict" id="mverdict" hidden></div>
+
+      <button class="btn ghost simple-clear" id="mclear" type="button">Clear meal</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFERENCE ============ -->
+<section id="tab-ref" hidden>
+  <p class="lead">Two numbers, two different questions. Most charts only answer the first one.</p>
+  <div class="refgrid">
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Glycemic Index (GI)</h3>
+      <p class="hint" style="margin-bottom:0">How fast the carbohydrate in a food raises blood glucose, measured against pure glucose (100). It says nothing about how much carbohydrate is actually on the plate.</p>
+      <div class="scale">
+        <div style="background:var(--low-bg);color:var(--low)"><b>Low</b><span>55 or less</span></div>
+        <div style="background:var(--mid-bg);color:var(--mid)"><b>Medium</b><span>56 – 69</span></div>
+        <div style="background:var(--high-bg);color:var(--high)"><b>High</b><span>70 or more</span></div>
+      </div>
+      <p class="note">Watermelon has a high GI of 76 — but a slice contains very little carbohydrate, so its real-world impact is small. That gap is exactly what glycemic load exists to close.</p>
+    </div>
+    <div class="card">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L18 14 A6 7 0 1 1 6 14 Z"/></svg>Glycemic Load (GL)</h3>
+      <p class="hint" style="margin-bottom:0">GI adjusted for the portion you actually eat: <b>GL = GI × available carbs ÷ 100</b>. This is the number that estimates the glycemic impact of the portion or meal.</p>
+      <div class="scale">
+        <div style="background:var(--low-bg);color:var(--low)"><b>Low</b><span>10 or less</span></div>
+        <div style="background:var(--mid-bg);color:var(--mid)"><b>Medium</b><span>11 – 19</span></div>
+        <div style="background:var(--high-bg);color:var(--high)"><b>High</b><span>20 or more</span></div>
+      </div>
+      <p class="note">Across a full day, a total GL under 80 is generally considered low and over 120 high. Meats, cheeses, oils and spices contain essentially no carbohydrate, so they carry a glycemic load of zero — they are listed here so you can build complete meals.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <h3 style="margin-bottom:4px">Four things that move the number</h3>
+    <p class="hint" style="margin-bottom:0">Published values are averages from tested subjects. Use them as a ranking tool, not as a lab result.</p>
+    <div class="ref-timeline">
+      <div class="ref-tl"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6-7-10a7 7 0 0 1 14 0c0 4-3 7-7 10Z"/></svg></span><h5>Ripeness</h5><p>A green banana tests around 42; fully ripe, around 62.</p></div>
+      <div class="ref-tl"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L18 14 A6 7 0 1 1 6 14 Z"/></svg></span><h5>Cooking</h5><p>Pasta al dente sits far below pasta cooked soft; a baked potato beats a boiled one.</p></div>
+      <div class="ref-tl"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 7l14 10M19 7 5 17"/></svg></span><h5>Cooling</h5><p>Rice, potatoes and pasta cooled after cooking form resistant starch and test lower.</p></div>
+      <div class="ref-tl"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.8"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M14.5 20c0-2.6 1.9-4.5 4.3-4.5S23 17.4 23 20"/></svg></span><h5>Company</h5><p>Fat, protein, acid and fibre eaten alongside carbohydrate slow the whole response.</p></div>
+      <div class="ref-tl"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a3 3 0 0 0 6 0V3M9 10v11M18 3c-2 2-2 5-2 7 0 1.5 1 2 2 2s2-.5 2-2c0-2 0-5-2-7ZM18 12v9"/></svg></span><h5>The recipe</h5><p>For prepared dishes, brands differ enormously. Build the meal from ingredients when it must be right.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="tab-about" hidden>
+  <div class="about-hero">
+    <div class="about-hero-inner">
+      <div>
+        <span class="lp-eyebrow reveal in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L18 14 A6 7 0 1 1 6 14 Z"/></svg>
+          587 foods · fully offline
+        </span>
+        <h1 class="reveal in">See the glycemic impact of the food <em>you actually eat.</em></h1>
+        <p class="lp-sub reveal in">Glycemic index tells you how fast. Glycemic load tells you how much it matters. Search the full food database, size the real portion you're eating, and build the whole plate — no chart-memorizing required.</p>
+        <div class="lp-ctas reveal in">
+          <button class="btn-primary cta-goto" data-goto="index" type="button">
+            Explore the food index
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <a class="btn-secondary" href="#why-matters">See how it works</a>
+        </div>
+        <div class="lp-trust reveal in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+          Sourced from peer-reviewed glycemic index &amp; load research
+        </div>
+        <div class="lp-stats reveal in">
+          <div>587<span>Foods</span></div>
+          <div>14<span>Categories</span></div>
+          <div>0<span>Accounts needed</span></div>
+        </div>
+      </div>
+      <div class="lp-illus reveal in">
+        <svg viewBox="0 0 320 320" fill="none">
+          <circle cx="160" cy="160" r="140" fill="var(--card)"/>
+          <circle cx="160" cy="160" r="140" fill="none" stroke="var(--line)" stroke-width="2"/>
+          <circle cx="160" cy="160" r="112" fill="var(--paper-2)"/>
+          <ellipse cx="120" cy="130" rx="46" ry="34" fill="var(--accent)" opacity=".85"/>
+          <ellipse cx="185" cy="115" rx="30" ry="24" fill="var(--accent)" opacity=".6"/>
+          <ellipse cx="205" cy="175" rx="42" ry="32" fill="var(--accent-2)" opacity=".9"/>
+          <ellipse cx="130" cy="205" rx="38" ry="28" fill="var(--accent-3)" opacity=".85"/>
+          <circle cx="170" cy="185" r="16" fill="#fff" opacity=".9"/>
+          <circle cx="150" cy="150" r="6" fill="#fff" opacity=".7"/>
+          <circle cx="196" cy="150" r="5" fill="#fff" opacity=".6"/>
+          <circle cx="118" cy="185" r="5" fill="#fff" opacity=".6"/>
+          <path d="M60 60c6-14 18-22 18-22M74 52c4-10 12-16 12-16" stroke="var(--ink-mute)" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+        </svg>
+        <div class="float-card fc1"><b>14</b><span>Glycemic load</span></div>
+        <div class="float-card fc2"><b>Low</b><span>Blood-sugar impact</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-section">
+    <div class="lp-head reveal">
+      <span class="eyebrow-txt">Why people keep this open</span>
+      <h2>Built to answer one question, fast.</h2>
+      <p>Not a diet plan. Not a tracker. A precise, beautiful reference for the two numbers that actually predict a blood-sugar response.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="bcard reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+        <h3>Search smarter</h3>
+        <p>587 foods indexed by glycemic index and load — searchable in seconds, not spreadsheets.</p>
+      </div>
+      <div class="bcard reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="8" y2="11"/><line x1="12" y1="11" x2="12" y2="11"/><line x1="16" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="12" y1="15" x2="12" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/></svg></span>
+        <h3>Real portions, real numbers</h3>
+        <p>Charts give you one fixed value. Size the exact portion you're eating and see its true impact.</p>
+      </div>
+      <div class="bcard reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a3 3 0 0 0 6 0V3M9 10v11M18 3c-2 2-2 5-2 7 0 1.5 1 2 2 2s2-.5 2-2c0-2 0-5-2-7ZM18 12v9"/></svg></span>
+        <h3>Build the whole plate</h3>
+        <p>Blood sugar responds to meals, not single ingredients. Combine foods and see the total load.</p>
+      </div>
+      <div class="bcard reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/></svg></span>
+        <h3>No account. No subscription.</h3>
+        <p>One file, entirely offline. Nothing you search or build ever leaves your device.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-section" id="why-matters">
+    <div class="lp-head reveal">
+      <span class="eyebrow-txt">The two numbers</span>
+      <h2>Why glycemic load matters</h2>
+      <p>Most charts only answer the first question below. That gap is exactly what glycemic load was built to close.</p>
+    </div>
+    <div class="why-wrap reveal">
+      <div class="why-grid">
+        <div class="why-card gi">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Glycemic Index</h4>
+          <p>How fast the carbohydrate in a food raises blood glucose, measured against pure glucose (100). It says nothing about how much carbohydrate is actually on the plate.</p>
+          <span class="formula">Watermelon: GI 76, almost no impact</span>
+        </div>
+        <div class="why-card gl">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L18 14 A6 7 0 1 1 6 14 Z"/></svg>Glycemic Load</h4>
+          <p>GI adjusted for the portion you actually eat. This is the number that estimates the glycemic impact of the portion or meal.</p>
+          <span class="formula">GL = GI × carbs ÷ 100</span>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item active"><div class="n">01</div><h5>Ripeness</h5><p>A green banana tests near 42; fully ripe, near 62.</p></div>
+        <div class="tl-item active"><div class="n">02</div><h5>Cooking</h5><p>Pasta al dente sits far below pasta cooked soft.</p></div>
+        <div class="tl-item active"><div class="n">03</div><h5>Cooling</h5><p>Cooled rice and potatoes form resistant starch.</p></div>
+        <div class="tl-item active"><div class="n">04</div><h5>Company</h5><p>Fat, protein and fibre slow the whole response.</p></div>
+        <div class="tl-item"><div class="n">05</div><h5>The recipe</h5><p>Mixed dishes vary — build from ingredients when it counts.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-section">
+    <div class="lp-head reveal">
+      <span class="eyebrow-txt">Inside the tool</span>
+      <h2>Four screens. One clear picture.</h2>
+      <p>Click any card to jump straight to that screen.</p>
+    </div>
+    <div class="preview-grid">
+      <button class="pcard reveal cta-goto" data-goto="index" type="button">
+        <div class="pframe"><div class="pchrome"><i></i><i></i><i></i></div>
+          <div class="pbody">
+            <div class="mini-line" style="width:60%;margin-bottom:10px"></div>
+            <div class="mini-row"><span class="mini-dot" style="background:var(--low)"></span><span class="mini-line" style="width:70%"></span></div>
+            <div class="mini-row"><span class="mini-dot" style="background:var(--mid)"></span><span class="mini-line" style="width:55%"></span></div>
+            <div class="mini-row"><span class="mini-dot" style="background:var(--high)"></span><span class="mini-line" style="width:65%"></span></div>
+          </div>
+        </div>
+        <div class="pmeta">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+          <h4>Food Database</h4>
+          <p>587 foods across 14 categories, each with GI, GL and a real-world serving size.</p>
+        </div>
+      </button>
+      <button class="pcard reveal cta-goto" data-goto="calc" type="button">
+        <div class="pframe"><div class="pchrome"><i></i><i></i><i></i></div>
+          <div class="pbody">
+            <div class="mini-num">14.2</div>
+            <div class="mini-num-lbl">Glycemic load</div>
+          </div>
+        </div>
+        <div class="pmeta">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/></svg></span>
+          <h4>Portion Calculator</h4>
+          <p>Pick any food, set the grams, and watch the glycemic load update instantly.</p>
+        </div>
+      </button>
+      <button class="pcard reveal cta-goto" data-goto="meal" type="button">
+        <div class="pframe"><div class="pchrome"><i></i><i></i><i></i></div>
+          <div class="pbody" style="display:flex;gap:14px;align-items:center">
+            <span class="mini-ring"></span>
+            <div style="flex:1">
+              <div class="mini-line" style="width:80%;margin-bottom:8px"></div>
+              <div class="mini-line" style="width:55%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="pmeta">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a3 3 0 0 0 6 0V3M9 10v11M18 3c-2 2-2 5-2 7 0 1.5 1 2 2 2s2-.5 2-2c0-2 0-5-2-7ZM18 12v9"/></svg></span>
+          <h4>Meal Builder</h4>
+          <p>Combine foods into a full meal and see the total glycemic load of the whole plate.</p>
+        </div>
+      </button>
+      <button class="pcard reveal cta-goto" data-goto="ref" type="button">
+        <div class="pframe"><div class="pchrome"><i></i><i></i><i></i></div>
+          <div class="pbody">
+            <div class="mini-bars">
+              <i style="height:40%;background:var(--low)"></i>
+              <i style="height:70%;background:var(--accent-2)"></i>
+              <i style="height:55%;background:var(--accent-3)"></i>
+              <i style="height:85%;background:var(--low)"></i>
+              <i style="height:30%;background:var(--zero)"></i>
+            </div>
+          </div>
+        </div>
+        <div class="pmeta">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6a2 2 0 0 1 2-2h9l5 5v10.5"/><path d="M6 20h13"/><path d="M9 8h4M9 12h6"/></svg></span>
+          <h4>Reference Guide</h4>
+          <p>The four factors that change a food's glycemic response, explained simply.</p>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="lp-final">
+    <h2 class="reveal">Ready to see your plate clearly?</h2>
+    <p class="reveal">No download, no signup — just open the food index.</p>
+    <button class="btn-primary reveal cta-goto" data-goto="index" type="button" style="display:inline-flex">
+      Open the food index
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+</main>
+
+<footer class="appfoot">
+  <p style="margin:0 0 6px"><b>Sources.</b> Glycemic index values are drawn from the International Tables of Glycemic Index and Glycemic Load Values (Atkinson, Foster-Powell &amp; Brand-Miller) and peer-reviewed literature. Carbohydrate values reflect available (net) carbohydrate from USDA FoodData Central. Foods with negligible carbohydrate are shown as GI 0.</p>
+  <p style="margin:0 0 6px"><b>A note on mixed dishes.</b> Entries in <i>Prepared &amp; Packaged</i> are composite foods whose recipes vary widely between brands and kitchens. Where a tested value exists it is used; otherwise the figure is estimated from the dish's components. Treat these as an order-of-magnitude guide and prefer building the meal from its individual ingredients when precision matters.</p>
+  <p style="margin:0">This tool is an educational reference. It is not medical advice and does not replace individual guidance from a physician or registered dietitian, particularly for anyone using insulin or glucose-lowering medication.</p>
+  <p style="margin:8px 0 0" id="footbrand"></p>
+</footer>
+</div>
+</div>
+
+<script>
+"use strict";
+var BRAND = {
+  name: "Glycemic Companion",
+  accent: "#2f6f56",
+  accentSoft: "#e8f1ec",
+  creditLine: "",
+  footer: ""
+};
+var FOODS = [{"n":"Chicken breast, skinless","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 breast (120 g)","cs":0.0,"gl":0.0},{"n":"Chicken thigh","c":"animal","gi":0,"cb":0,"sg":100,"sl":"1 thigh (100 g)","cs":0.0,"gl":0.0},{"n":"Turkey breast","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 serving (120 g)","cs":0.0,"gl":0.0},{"n":"Beef sirloin steak","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 steak (120 g)","cs":0.0,"gl":0.0},{"n":"Ground beef, 85% lean","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 patty (113 g)","cs":0.0,"gl":0.0},{"n":"Beef liver","c":"animal","gi":0,"cb":3.9,"sg":85,"sl":"1 serving (85 g)","cs":3.3,"gl":0.0},{"n":"Pork loin","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 chop (120 g)","cs":0.0,"gl":0.0},{"n":"Pork tenderloin","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 serving (120 g)","cs":0.0,"gl":0.0},{"n":"Bacon","c":"animal","gi":0,"cb":1.3,"sg":24,"sl":"3 slices (24 g)","cs":0.3,"gl":0.0},{"n":"Ham, deli sliced","c":"animal","gi":0,"cb":1.5,"sg":56,"sl":"2 slices (56 g)","cs":0.8,"gl":0.0},{"n":"Lamb chop","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 chop (120 g)","cs":0.0,"gl":0.0},{"n":"Duck breast","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 breast (120 g)","cs":0.0,"gl":0.0},{"n":"Venison","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 serving (120 g)","cs":0.0,"gl":0.0},{"n":"Salmon, wild","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Salmon, canned","c":"animal","gi":0,"cb":0,"sg":85,"sl":"1 can drained (85 g)","cs":0.0,"gl":0.0},{"n":"Tuna, canned in water","c":"animal","gi":0,"cb":0,"sg":85,"sl":"1 can drained (85 g)","cs":0.0,"gl":0.0},{"n":"Cod","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Tilapia","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Trout","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Mackerel","c":"animal","gi":0,"cb":0,"sg":100,"sl":"1 fillet (100 g)","cs":0.0,"gl":0.0},{"n":"Sardines, canned","c":"animal","gi":0,"cb":0,"sg":92,"sl":"1 can (92 g)","cs":0.0,"gl":0.0},{"n":"Anchovies","c":"animal","gi":0,"cb":0,"sg":45,"sl":"1 small tin (45 g)","cs":0.0,"gl":0.0},{"n":"Shrimp","c":"animal","gi":0,"cb":0.2,"sg":85,"sl":"1 serving (85 g)","cs":0.2,"gl":0.0},{"n":"Scallops","c":"animal","gi":0,"cb":5.4,"sg":85,"sl":"1 serving (85 g)","cs":4.6,"gl":0.0},{"n":"Mussels","c":"animal","gi":0,"cb":7.4,"sg":85,"sl":"1 serving (85 g)","cs":6.3,"gl":0.0},{"n":"Egg, whole","c":"animal","gi":0,"cb":0.6,"sg":50,"sl":"1 large egg (50 g)","cs":0.3,"gl":0.0},{"n":"Egg whites","c":"animal","gi":0,"cb":0.7,"sg":99,"sl":"3 whites (99 g)","cs":0.7,"gl":0.0},{"n":"Tofu, firm","c":"plant","gi":15,"cb":2.3,"sg":100,"sl":"1/2 block (100 g)","cs":2.3,"gl":0.3},{"n":"Tofu, silken","c":"plant","gi":15,"cb":3.1,"sg":100,"sl":"1 serving (100 g)","cs":3.1,"gl":0.5},{"n":"Tempeh","c":"plant","gi":15,"cb":9.4,"sg":100,"sl":"1 serving (100 g)","cs":9.4,"gl":1.4},{"n":"Seitan","c":"plant","gi":25,"cb":14.0,"sg":100,"sl":"1 serving (100 g)","cs":14.0,"gl":3.5},{"n":"Edamame, shelled","c":"plant","gi":18,"cb":8.9,"sg":155,"sl":"1 cup (155 g)","cs":13.8,"gl":2.5},{"n":"Natto","c":"plant","gi":33,"cb":7.6,"sg":100,"sl":"1 serving (100 g)","cs":7.6,"gl":2.5},{"n":"Textured vegetable protein (dry)","c":"plant","gi":30,"cb":17.0,"sg":30,"sl":"1/4 cup dry (30 g)","cs":5.1,"gl":1.5},{"n":"Soy milk, unsweetened","c":"dairy","gi":34,"cb":1.8,"sg":244,"sl":"1 cup (244 ml)","cs":4.4,"gl":1.5},{"n":"Soy protein isolate powder","c":"plant","gi":25,"cb":7.4,"sg":30,"sl":"1 scoop (30 g)","cs":2.2,"gl":0.6},{"n":"Pea protein powder","c":"plant","gi":25,"cb":7.0,"sg":30,"sl":"1 scoop (30 g)","cs":2.1,"gl":0.5},{"n":"Veggie burger, soy-based","c":"plant","gi":59,"cb":15.0,"sg":71,"sl":"1 patty (71 g)","cs":10.7,"gl":6.3},{"n":"Lupini beans","c":"plant","gi":15,"cb":4.0,"sg":100,"sl":"1 serving (100 g)","cs":4.0,"gl":0.6},{"n":"Apple, fresh","c":"fruit","gi":36,"cb":11.4,"sg":182,"sl":"1 medium (182 g)","cs":20.7,"gl":7.5},{"n":"Pear, fresh","c":"fruit","gi":38,"cb":12.5,"sg":178,"sl":"1 medium (178 g)","cs":22.3,"gl":8.5},{"n":"Orange, fresh","c":"fruit","gi":43,"cb":9.4,"sg":131,"sl":"1 medium (131 g)","cs":12.3,"gl":5.3},{"n":"Tangerine","c":"fruit","gi":42,"cb":11.5,"sg":88,"sl":"1 medium (88 g)","cs":10.1,"gl":4.2},{"n":"Grapefruit","c":"fruit","gi":25,"cb":7.3,"sg":123,"sl":"1/2 fruit (123 g)","cs":9.0,"gl":2.3},{"n":"Peach, fresh","c":"fruit","gi":42,"cb":8.0,"sg":150,"sl":"1 medium (150 g)","cs":12.0,"gl":5.0},{"n":"Nectarine","c":"fruit","gi":43,"cb":8.6,"sg":142,"sl":"1 medium (142 g)","cs":12.2,"gl":5.2},{"n":"Plum, fresh","c":"fruit","gi":39,"cb":10.0,"sg":66,"sl":"1 medium (66 g)","cs":6.6,"gl":2.6},{"n":"Apricot, fresh","c":"fruit","gi":34,"cb":8.4,"sg":70,"sl":"2 apricots (70 g)","cs":5.9,"gl":2.0},{"n":"Cherries, sweet","c":"fruit","gi":22,"cb":14.6,"sg":140,"sl":"1 cup (140 g)","cs":20.4,"gl":4.5},{"n":"Strawberries","c":"fruit","gi":40,"cb":5.7,"sg":152,"sl":"1 cup (152 g)","cs":8.7,"gl":3.5},{"n":"Blueberries","c":"fruit","gi":53,"cb":12.1,"sg":148,"sl":"1 cup (148 g)","cs":17.9,"gl":9.5},{"n":"Raspberries","c":"fruit","gi":32,"cb":5.4,"sg":123,"sl":"1 cup (123 g)","cs":6.6,"gl":2.1},{"n":"Blackberries","c":"fruit","gi":25,"cb":4.3,"sg":144,"sl":"1 cup (144 g)","cs":6.2,"gl":1.6},{"n":"Grapes","c":"fruit","gi":59,"cb":17.2,"sg":92,"sl":"1 cup (92 g)","cs":15.8,"gl":9.3},{"n":"Banana, ripe","c":"fruit","gi":62,"cb":20.3,"sg":118,"sl":"1 medium (118 g)","cs":24.0,"gl":14.9},{"n":"Banana, slightly green","c":"fruit","gi":42,"cb":20.3,"sg":118,"sl":"1 medium (118 g)","cs":24.0,"gl":10.1},{"n":"Watermelon","c":"fruit","gi":76,"cb":7.2,"sg":152,"sl":"1 cup diced (152 g)","cs":10.9,"gl":8.3},{"n":"Cantaloupe","c":"fruit","gi":65,"cb":7.3,"sg":160,"sl":"1 cup diced (160 g)","cs":11.7,"gl":7.6},{"n":"Honeydew melon","c":"fruit","gi":62,"cb":8.3,"sg":170,"sl":"1 cup diced (170 g)","cs":14.1,"gl":8.7},{"n":"Pineapple, fresh","c":"fruit","gi":59,"cb":11.6,"sg":165,"sl":"1 cup chunks (165 g)","cs":19.1,"gl":11.3},{"n":"Mango","c":"fruit","gi":51,"cb":13.4,"sg":165,"sl":"1 cup diced (165 g)","cs":22.1,"gl":11.3},{"n":"Papaya","c":"fruit","gi":60,"cb":9.1,"sg":145,"sl":"1 cup cubed (145 g)","cs":13.2,"gl":7.9},{"n":"Kiwi","c":"fruit","gi":50,"cb":11.7,"sg":69,"sl":"1 medium (69 g)","cs":8.1,"gl":4.1},{"n":"Pomegranate arils","c":"fruit","gi":53,"cb":14.7,"sg":87,"sl":"1/2 cup (87 g)","cs":12.8,"gl":6.8},{"n":"Fig, fresh","c":"fruit","gi":51,"cb":16.3,"sg":50,"sl":"1 medium (50 g)","cs":8.2,"gl":4.2},{"n":"Lychee","c":"fruit","gi":57,"cb":15.2,"sg":100,"sl":"1 serving (100 g)","cs":15.2,"gl":8.7},{"n":"Passion fruit","c":"fruit","gi":30,"cb":12.5,"sg":100,"sl":"1 serving (100 g)","cs":12.5,"gl":3.8},{"n":"Guava","c":"fruit","gi":31,"cb":8.9,"sg":100,"sl":"1 serving (100 g)","cs":8.9,"gl":2.8},{"n":"Avocado","c":"fruit","gi":15,"cb":1.8,"sg":100,"sl":"1/2 avocado (100 g)","cs":1.8,"gl":0.3},{"n":"Dates, Medjool","c":"fruit","gi":42,"cb":70.0,"sg":24,"sl":"1 date (24 g)","cs":16.8,"gl":7.1},{"n":"Raisins","c":"fruit","gi":64,"cb":75.0,"sg":43,"sl":"1 small box (43 g)","cs":32.3,"gl":20.7},{"n":"Dried apricots","c":"fruit","gi":30,"cb":53.0,"sg":40,"sl":"1/4 cup (40 g)","cs":21.2,"gl":6.4},{"n":"Dried figs","c":"fruit","gi":61,"cb":58.0,"sg":40,"sl":"1/4 cup (40 g)","cs":23.2,"gl":14.2},{"n":"Prunes","c":"fruit","gi":29,"cb":55.0,"sg":40,"sl":"4 prunes (40 g)","cs":22.0,"gl":6.4},{"n":"Dried cranberries, sweetened","c":"fruit","gi":64,"cb":78.0,"sg":40,"sl":"1/4 cup (40 g)","cs":31.2,"gl":20.0},{"n":"Apple juice, unsweetened","c":"bev","gi":41,"cb":11.3,"sg":248,"sl":"1 cup (248 ml)","cs":28.0,"gl":11.5},{"n":"Orange juice, fresh","c":"bev","gi":50,"cb":10.4,"sg":248,"sl":"1 cup (248 ml)","cs":25.8,"gl":12.9},{"n":"Broccoli","c":"veg","gi":15,"cb":4.0,"sg":91,"sl":"1 cup (91 g)","cs":3.6,"gl":0.5},{"n":"Cauliflower","c":"veg","gi":15,"cb":3.0,"sg":100,"sl":"1 cup (100 g)","cs":3.0,"gl":0.5},{"n":"Spinach, raw","c":"veg","gi":15,"cb":1.4,"sg":30,"sl":"1 cup (30 g)","cs":0.4,"gl":0.1},{"n":"Kale","c":"veg","gi":15,"cb":4.4,"sg":67,"sl":"1 cup (67 g)","cs":2.9,"gl":0.4},{"n":"Romaine lettuce","c":"veg","gi":15,"cb":1.2,"sg":47,"sl":"1 cup (47 g)","cs":0.6,"gl":0.1},{"n":"Arugula","c":"veg","gi":15,"cb":2.1,"sg":20,"sl":"1 cup (20 g)","cs":0.4,"gl":0.1},{"n":"Cabbage","c":"veg","gi":15,"cb":3.3,"sg":89,"sl":"1 cup (89 g)","cs":2.9,"gl":0.4},{"n":"Bok choy","c":"veg","gi":15,"cb":1.2,"sg":70,"sl":"1 cup (70 g)","cs":0.8,"gl":0.1},{"n":"Swiss chard","c":"veg","gi":15,"cb":2.1,"sg":36,"sl":"1 cup (36 g)","cs":0.8,"gl":0.1},{"n":"Brussels sprouts","c":"veg","gi":15,"cb":5.2,"sg":88,"sl":"1 cup (88 g)","cs":4.6,"gl":0.7},{"n":"Asparagus","c":"veg","gi":15,"cb":1.8,"sg":134,"sl":"1 cup (134 g)","cs":2.4,"gl":0.4},{"n":"Zucchini","c":"veg","gi":15,"cb":2.1,"sg":124,"sl":"1 cup (124 g)","cs":2.6,"gl":0.4},{"n":"Cucumber","c":"veg","gi":15,"cb":3.1,"sg":104,"sl":"1 cup (104 g)","cs":3.2,"gl":0.5},{"n":"Bell pepper, red","c":"veg","gi":15,"cb":4.7,"sg":149,"sl":"1 cup (149 g)","cs":7.0,"gl":1.1},{"n":"Tomato","c":"veg","gi":15,"cb":2.7,"sg":123,"sl":"1 medium (123 g)","cs":3.3,"gl":0.5},{"n":"Cherry tomatoes","c":"veg","gi":15,"cb":2.7,"sg":149,"sl":"1 cup (149 g)","cs":4.0,"gl":0.6},{"n":"Celery","c":"veg","gi":15,"cb":1.4,"sg":101,"sl":"1 cup (101 g)","cs":1.4,"gl":0.2},{"n":"Mushrooms, white","c":"veg","gi":15,"cb":2.3,"sg":70,"sl":"1 cup (70 g)","cs":1.6,"gl":0.2},{"n":"Onion","c":"veg","gi":15,"cb":7.6,"sg":110,"sl":"1 medium (110 g)","cs":8.4,"gl":1.3},{"n":"Leek","c":"veg","gi":15,"cb":12.3,"sg":89,"sl":"1 cup (89 g)","cs":10.9,"gl":1.6},{"n":"Garlic","c":"veg","gi":15,"cb":30.9,"sg":3,"sl":"1 clove (3 g)","cs":0.9,"gl":0.1},{"n":"Eggplant","c":"veg","gi":15,"cb":5.9,"sg":82,"sl":"1 cup cubed (82 g)","cs":4.8,"gl":0.7},{"n":"Artichoke","c":"veg","gi":15,"cb":5.4,"sg":128,"sl":"1 medium (128 g)","cs":6.9,"gl":1.0},{"n":"Okra","c":"veg","gi":15,"cb":3.8,"sg":100,"sl":"1 cup (100 g)","cs":3.8,"gl":0.6},{"n":"Radish","c":"veg","gi":15,"cb":1.8,"sg":116,"sl":"1 cup (116 g)","cs":2.1,"gl":0.3},{"n":"Snow peas","c":"veg","gi":15,"cb":4.5,"sg":63,"sl":"1 cup (63 g)","cs":2.8,"gl":0.4},{"n":"Green beans","c":"veg","gi":28,"cb":4.3,"sg":125,"sl":"1 cup (125 g)","cs":5.4,"gl":1.5},{"n":"Carrot, raw","c":"veg","gi":39,"cb":6.8,"sg":128,"sl":"1 cup chopped (128 g)","cs":8.7,"gl":3.4},{"n":"Carrot, boiled","c":"veg","gi":49,"cb":6.4,"sg":150,"sl":"1 cup sliced (150 g)","cs":9.6,"gl":4.7},{"n":"Beetroot, boiled","c":"veg","gi":64,"cb":7.9,"sg":170,"sl":"1 cup (170 g)","cs":13.4,"gl":8.6},{"n":"Green peas","c":"veg","gi":51,"cb":10.0,"sg":160,"sl":"1 cup (160 g)","cs":16.0,"gl":8.2},{"n":"Sweet corn","c":"veg","gi":52,"cb":17.0,"sg":164,"sl":"1 cup (164 g)","cs":27.9,"gl":14.5},{"n":"Parsnip, boiled","c":"veg","gi":52,"cb":13.0,"sg":156,"sl":"1 cup (156 g)","cs":20.3,"gl":10.6},{"n":"Pumpkin, boiled","c":"veg","gi":75,"cb":4.9,"sg":245,"sl":"1 cup mashed (245 g)","cs":12.0,"gl":9.0},{"n":"Butternut squash, baked","c":"veg","gi":51,"cb":10.5,"sg":205,"sl":"1 cup cubed (205 g)","cs":21.5,"gl":11.0},{"n":"Sweet potato, boiled","c":"veg","gi":63,"cb":17.0,"sg":150,"sl":"1 medium (150 g)","cs":25.5,"gl":16.1},{"n":"Sweet potato, baked","c":"veg","gi":94,"cb":17.0,"sg":150,"sl":"1 medium (150 g)","cs":25.5,"gl":24.0},{"n":"Potato, white boiled","c":"veg","gi":78,"cb":15.7,"sg":150,"sl":"1 medium (150 g)","cs":23.6,"gl":18.4},{"n":"Potato, baked russet","c":"veg","gi":111,"cb":18.6,"sg":173,"sl":"1 medium (173 g)","cs":32.2,"gl":35.7},{"n":"Potato, new/waxy boiled","c":"veg","gi":57,"cb":15.7,"sg":150,"sl":"1 serving (150 g)","cs":23.6,"gl":13.5},{"n":"Mashed potato, instant","c":"veg","gi":87,"cb":13.5,"sg":210,"sl":"1 cup (210 g)","cs":28.4,"gl":24.7},{"n":"French fries","c":"veg","gi":63,"cb":35.7,"sg":117,"sl":"1 medium order (117 g)","cs":41.8,"gl":26.3},{"n":"Yam, boiled","c":"veg","gi":54,"cb":23.8,"sg":136,"sl":"1 cup (136 g)","cs":32.4,"gl":17.5},{"n":"Taro, boiled","c":"veg","gi":53,"cb":26.5,"sg":132,"sl":"1 cup (132 g)","cs":35.0,"gl":18.6},{"n":"Cassava, boiled","c":"veg","gi":46,"cb":33.0,"sg":100,"sl":"1 serving (100 g)","cs":33.0,"gl":15.2},{"n":"Plantain, boiled","c":"veg","gi":66,"cb":28.0,"sg":154,"sl":"1 cup (154 g)","cs":43.1,"gl":28.4},{"n":"Rolled oats, cooked","c":"grain","gi":55,"cb":10.8,"sg":234,"sl":"1 cup cooked (234 g)","cs":25.3,"gl":13.9},{"n":"Steel-cut oats, cooked","c":"grain","gi":52,"cb":11.0,"sg":234,"sl":"1 cup cooked (234 g)","cs":25.7,"gl":13.4},{"n":"Instant oatmeal","c":"grain","gi":79,"cb":10.8,"sg":234,"sl":"1 cup prepared (234 g)","cs":25.3,"gl":20.0},{"n":"Muesli, natural","c":"grain","gi":57,"cb":66.0,"sg":45,"sl":"1/2 cup (45 g)","cs":29.7,"gl":16.9},{"n":"Granola","c":"grain","gi":61,"cb":64.0,"sg":45,"sl":"1/2 cup (45 g)","cs":28.8,"gl":17.6},{"n":"Bran flakes","c":"grain","gi":74,"cb":72.0,"sg":30,"sl":"3/4 cup (30 g)","cs":21.6,"gl":16.0},{"n":"All-Bran cereal","c":"grain","gi":44,"cb":46.0,"sg":30,"sl":"1/2 cup (30 g)","cs":13.8,"gl":6.1},{"n":"Shredded wheat","c":"grain","gi":75,"cb":68.0,"sg":45,"sl":"2 biscuits (45 g)","cs":30.6,"gl":23.0},{"n":"Pearled barley, cooked","c":"grain","gi":28,"cb":24.4,"sg":157,"sl":"1 cup cooked (157 g)","cs":38.3,"gl":10.7},{"n":"Bulgur, cooked","c":"grain","gi":48,"cb":16.0,"sg":182,"sl":"1 cup cooked (182 g)","cs":29.1,"gl":14.0},{"n":"Farro, cooked","c":"grain","gi":45,"cb":26.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":41.6,"gl":18.7},{"n":"Spelt, cooked","c":"grain","gi":54,"cb":25.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":40.0,"gl":21.6},{"n":"Freekeh, cooked","c":"grain","gi":43,"cb":25.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":40.0,"gl":17.2},{"n":"Wheat berries, cooked","c":"grain","gi":41,"cb":26.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":41.6,"gl":17.1},{"n":"Whole wheat bread","c":"grain","gi":74,"cb":41.0,"sg":32,"sl":"1 slice (32 g)","cs":13.1,"gl":9.7},{"n":"Stone-ground whole wheat bread","c":"grain","gi":53,"cb":41.0,"sg":32,"sl":"1 slice (32 g)","cs":13.1,"gl":6.9},{"n":"Sourdough bread","c":"grain","gi":54,"cb":47.0,"sg":36,"sl":"1 slice (36 g)","cs":16.9,"gl":9.1},{"n":"Pumpernickel bread","c":"grain","gi":50,"cb":42.0,"sg":32,"sl":"1 slice (32 g)","cs":13.4,"gl":6.7},{"n":"Rye crispbread","c":"grain","gi":64,"cb":68.0,"sg":20,"sl":"2 crackers (20 g)","cs":13.6,"gl":8.7},{"n":"Whole wheat pita","c":"grain","gi":57,"cb":50.0,"sg":64,"sl":"1 pita (64 g)","cs":32.0,"gl":18.2},{"n":"Whole wheat tortilla","c":"grain","gi":30,"cb":45.0,"sg":45,"sl":"1 tortilla (45 g)","cs":20.3,"gl":6.1},{"n":"Whole wheat pasta, al dente","c":"grain","gi":42,"cb":26.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":36.4,"gl":15.3},{"n":"White pasta, al dente","c":"grain","gi":49,"cb":28.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":39.2,"gl":19.2},{"n":"Couscous, whole wheat","c":"grain","gi":65,"cb":21.0,"sg":157,"sl":"1 cup cooked (157 g)","cs":33.0,"gl":21.5},{"n":"Whole wheat crackers","c":"grain","gi":67,"cb":66.0,"sg":30,"sl":"6 crackers (30 g)","cs":19.8,"gl":13.3},{"n":"Quinoa, cooked","c":"gf","gi":53,"cb":18.5,"sg":185,"sl":"1 cup cooked (185 g)","cs":34.2,"gl":18.1},{"n":"Buckwheat groats, cooked","c":"gf","gi":45,"cb":19.9,"sg":168,"sl":"1 cup cooked (168 g)","cs":33.4,"gl":15.0},{"n":"Soba noodles, buckwheat","c":"gf","gi":46,"cb":21.4,"sg":114,"sl":"1 cup cooked (114 g)","cs":24.4,"gl":11.2},{"n":"Brown rice, cooked","c":"gf","gi":68,"cb":21.2,"sg":195,"sl":"1 cup cooked (195 g)","cs":41.3,"gl":28.1},{"n":"White rice, long grain","c":"gf","gi":73,"cb":28.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":44.2,"gl":32.3},{"n":"Basmati rice, cooked","c":"gf","gi":50,"cb":25.0,"sg":163,"sl":"1 cup cooked (163 g)","cs":40.8,"gl":20.4},{"n":"Jasmine rice, cooked","c":"gf","gi":89,"cb":28.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":44.2,"gl":39.3},{"n":"Wild rice, cooked","c":"gf","gi":57,"cb":21.3,"sg":164,"sl":"1 cup cooked (164 g)","cs":34.9,"gl":19.9},{"n":"Sticky/glutinous rice","c":"gf","gi":87,"cb":29.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":45.8,"gl":39.8},{"n":"Millet, cooked","c":"gf","gi":71,"cb":23.7,"sg":174,"sl":"1 cup cooked (174 g)","cs":41.2,"gl":29.3},{"n":"Sorghum, cooked","c":"gf","gi":62,"cb":25.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":40.0,"gl":24.8},{"n":"Teff, cooked","c":"gf","gi":57,"cb":20.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":32.0,"gl":18.2},{"n":"Corn tortilla","c":"gf","gi":46,"cb":44.0,"sg":26,"sl":"1 tortilla (26 g)","cs":11.4,"gl":5.2},{"n":"Polenta / cornmeal, cooked","c":"gf","gi":68,"cb":15.0,"sg":180,"sl":"1 cup cooked (180 g)","cs":27.0,"gl":18.4},{"n":"Popcorn, air-popped","c":"gf","gi":65,"cb":66.0,"sg":24,"sl":"3 cups (24 g)","cs":15.8,"gl":10.3},{"n":"Rice cakes, plain","c":"gf","gi":82,"cb":80.0,"sg":18,"sl":"2 cakes (18 g)","cs":14.4,"gl":11.8},{"n":"Rice noodles, cooked","c":"gf","gi":53,"cb":24.0,"sg":176,"sl":"1 cup cooked (176 g)","cs":42.2,"gl":22.4},{"n":"Gluten-free white bread","c":"gf","gi":80,"cb":48.0,"sg":32,"sl":"1 slice (32 g)","cs":15.4,"gl":12.3},{"n":"Certified gluten-free oats","c":"gf","gi":55,"cb":10.8,"sg":234,"sl":"1 cup cooked (234 g)","cs":25.3,"gl":13.9},{"n":"Cornflakes","c":"gf","gi":81,"cb":84.0,"sg":28,"sl":"1 cup (28 g)","cs":23.5,"gl":19.0},{"n":"Whole milk","c":"dairy","gi":39,"cb":4.7,"sg":244,"sl":"1 cup (244 ml)","cs":11.5,"gl":4.5},{"n":"Skim milk","c":"dairy","gi":37,"cb":5.0,"sg":245,"sl":"1 cup (245 ml)","cs":12.3,"gl":4.6},{"n":"Chocolate milk","c":"dairy","gi":34,"cb":10.4,"sg":250,"sl":"1 cup (250 ml)","cs":26.0,"gl":8.8},{"n":"Sweetened condensed milk","c":"dairy","gi":61,"cb":54.0,"sg":38,"sl":"2 tbsp (38 g)","cs":20.5,"gl":12.5},{"n":"Plain yogurt, full fat","c":"dairy","gi":36,"cb":4.7,"sg":245,"sl":"1 cup (245 g)","cs":11.5,"gl":4.1},{"n":"Greek yogurt, plain","c":"dairy","gi":11,"cb":3.6,"sg":170,"sl":"1 container (170 g)","cs":6.1,"gl":0.7},{"n":"Fruit yogurt, low fat","c":"dairy","gi":33,"cb":18.6,"sg":170,"sl":"1 container (170 g)","cs":31.6,"gl":10.4},{"n":"Kefir, plain","c":"dairy","gi":34,"cb":4.5,"sg":244,"sl":"1 cup (244 ml)","cs":11.0,"gl":3.7},{"n":"Cottage cheese","c":"dairy","gi":30,"cb":3.4,"sg":113,"sl":"1/2 cup (113 g)","cs":3.8,"gl":1.1},{"n":"Ricotta, part skim","c":"dairy","gi":27,"cb":5.1,"sg":124,"sl":"1/2 cup (124 g)","cs":6.3,"gl":1.7},{"n":"Cheddar cheese","c":"dairy","gi":0,"cb":1.3,"sg":28,"sl":"1 oz (28 g)","cs":0.4,"gl":0.0},{"n":"Mozzarella","c":"dairy","gi":0,"cb":2.2,"sg":28,"sl":"1 oz (28 g)","cs":0.6,"gl":0.0},{"n":"Parmesan","c":"dairy","gi":0,"cb":3.2,"sg":28,"sl":"1 oz (28 g)","cs":0.9,"gl":0.0},{"n":"Feta","c":"dairy","gi":0,"cb":4.1,"sg":28,"sl":"1 oz (28 g)","cs":1.1,"gl":0.0},{"n":"Goat cheese","c":"dairy","gi":0,"cb":0.1,"sg":28,"sl":"1 oz (28 g)","cs":0.0,"gl":0.0},{"n":"Blue cheese","c":"dairy","gi":0,"cb":2.3,"sg":28,"sl":"1 oz (28 g)","cs":0.6,"gl":0.0},{"n":"Brie","c":"dairy","gi":0,"cb":0.5,"sg":28,"sl":"1 oz (28 g)","cs":0.1,"gl":0.0},{"n":"Swiss cheese","c":"dairy","gi":0,"cb":5.4,"sg":28,"sl":"1 oz (28 g)","cs":1.5,"gl":0.0},{"n":"Provolone","c":"dairy","gi":0,"cb":2.1,"sg":28,"sl":"1 oz (28 g)","cs":0.6,"gl":0.0},{"n":"Halloumi","c":"dairy","gi":0,"cb":2.2,"sg":28,"sl":"1 oz (28 g)","cs":0.6,"gl":0.0},{"n":"Cream cheese","c":"dairy","gi":0,"cb":5.5,"sg":28,"sl":"2 tbsp (28 g)","cs":1.5,"gl":0.0},{"n":"Sour cream","c":"dairy","gi":0,"cb":4.6,"sg":30,"sl":"2 tbsp (30 g)","cs":1.4,"gl":0.0},{"n":"Heavy cream","c":"dairy","gi":0,"cb":2.8,"sg":30,"sl":"2 tbsp (30 ml)","cs":0.8,"gl":0.0},{"n":"Ice cream, regular","c":"dairy","gi":57,"cb":23.6,"sg":66,"sl":"1/2 cup (66 g)","cs":15.6,"gl":8.9},{"n":"Ice cream, low fat","c":"dairy","gi":50,"cb":22.0,"sg":66,"sl":"1/2 cup (66 g)","cs":14.5,"gl":7.3},{"n":"Chickpeas, boiled","c":"legume","gi":28,"cb":19.8,"sg":164,"sl":"1 cup (164 g)","cs":32.5,"gl":9.1},{"n":"Chickpeas, canned","c":"legume","gi":38,"cb":15.0,"sg":164,"sl":"1 cup (164 g)","cs":24.6,"gl":9.3},{"n":"Red lentils, boiled","c":"legume","gi":26,"cb":13.0,"sg":198,"sl":"1 cup (198 g)","cs":25.7,"gl":6.7},{"n":"Green/brown lentils, boiled","c":"legume","gi":29,"cb":12.2,"sg":198,"sl":"1 cup (198 g)","cs":24.2,"gl":7.0},{"n":"Black beans, boiled","c":"legume","gi":30,"cb":15.0,"sg":172,"sl":"1 cup (172 g)","cs":25.8,"gl":7.7},{"n":"Kidney beans, boiled","c":"legume","gi":24,"cb":16.4,"sg":177,"sl":"1 cup (177 g)","cs":29.0,"gl":7.0},{"n":"Pinto beans, boiled","c":"legume","gi":39,"cb":17.2,"sg":171,"sl":"1 cup (171 g)","cs":29.4,"gl":11.5},{"n":"Navy beans, boiled","c":"legume","gi":31,"cb":15.6,"sg":182,"sl":"1 cup (182 g)","cs":28.4,"gl":8.8},{"n":"Cannellini beans, boiled","c":"legume","gi":31,"cb":18.8,"sg":179,"sl":"1 cup (179 g)","cs":33.7,"gl":10.4},{"n":"Lima beans, boiled","c":"legume","gi":32,"cb":13.9,"sg":188,"sl":"1 cup (188 g)","cs":26.1,"gl":8.4},{"n":"Butter beans, boiled","c":"legume","gi":36,"cb":13.9,"sg":182,"sl":"1 cup (182 g)","cs":25.3,"gl":9.1},{"n":"Black-eyed peas, boiled","c":"legume","gi":33,"cb":14.5,"sg":171,"sl":"1 cup (171 g)","cs":24.8,"gl":8.2},{"n":"Split peas, boiled","c":"legume","gi":25,"cb":12.8,"sg":196,"sl":"1 cup (196 g)","cs":25.1,"gl":6.3},{"n":"Soybeans, boiled","c":"legume","gi":16,"cb":5.0,"sg":172,"sl":"1 cup (172 g)","cs":8.6,"gl":1.4},{"n":"Mung beans, boiled","c":"legume","gi":25,"cb":11.6,"sg":202,"sl":"1 cup (202 g)","cs":23.4,"gl":5.9},{"n":"Adzuki beans, boiled","c":"legume","gi":35,"cb":17.7,"sg":230,"sl":"1 cup (230 g)","cs":40.7,"gl":14.2},{"n":"Broad (fava) beans, boiled","c":"legume","gi":79,"cb":7.6,"sg":170,"sl":"1 cup (170 g)","cs":12.9,"gl":10.2},{"n":"Baked beans, canned","c":"legume","gi":40,"cb":15.5,"sg":254,"sl":"1 cup (254 g)","cs":39.4,"gl":15.8},{"n":"Refried beans","c":"legume","gi":39,"cb":10.0,"sg":238,"sl":"1 cup (238 g)","cs":23.8,"gl":9.3},{"n":"Hummus","c":"legume","gi":6,"cb":8.0,"sg":60,"sl":"1/4 cup (60 g)","cs":4.8,"gl":0.3},{"n":"Almonds","c":"nuts","gi":15,"cb":9.1,"sg":28,"sl":"1 oz / 23 nuts (28 g)","cs":2.5,"gl":0.4},{"n":"Walnuts","c":"nuts","gi":15,"cb":7.0,"sg":28,"sl":"1 oz (28 g)","cs":2.0,"gl":0.3},{"n":"Pecans","c":"nuts","gi":10,"cb":4.3,"sg":28,"sl":"1 oz (28 g)","cs":1.2,"gl":0.1},{"n":"Cashews","c":"nuts","gi":22,"cb":26.9,"sg":28,"sl":"1 oz (28 g)","cs":7.5,"gl":1.7},{"n":"Pistachios","c":"nuts","gi":15,"cb":16.6,"sg":28,"sl":"1 oz (28 g)","cs":4.6,"gl":0.7},{"n":"Macadamia nuts","c":"nuts","gi":10,"cb":5.2,"sg":28,"sl":"1 oz (28 g)","cs":1.5,"gl":0.2},{"n":"Hazelnuts","c":"nuts","gi":15,"cb":7.0,"sg":28,"sl":"1 oz (28 g)","cs":2.0,"gl":0.3},{"n":"Brazil nuts","c":"nuts","gi":15,"cb":4.8,"sg":28,"sl":"1 oz (28 g)","cs":1.3,"gl":0.2},{"n":"Pine nuts","c":"nuts","gi":15,"cb":9.4,"sg":28,"sl":"1 oz (28 g)","cs":2.6,"gl":0.4},{"n":"Peanuts","c":"nuts","gi":13,"cb":7.6,"sg":28,"sl":"1 oz (28 g)","cs":2.1,"gl":0.3},{"n":"Sunflower seeds","c":"nuts","gi":15,"cb":11.4,"sg":28,"sl":"1 oz (28 g)","cs":3.2,"gl":0.5},{"n":"Pumpkin seeds","c":"nuts","gi":10,"cb":4.7,"sg":28,"sl":"1 oz (28 g)","cs":1.3,"gl":0.1},{"n":"Chia seeds","c":"nuts","gi":1,"cb":7.7,"sg":28,"sl":"1 oz (28 g)","cs":2.2,"gl":0.0},{"n":"Flaxseeds, ground","c":"nuts","gi":35,"cb":1.6,"sg":14,"sl":"2 tbsp (14 g)","cs":0.2,"gl":0.1},{"n":"Sesame seeds","c":"nuts","gi":35,"cb":11.7,"sg":28,"sl":"1 oz (28 g)","cs":3.3,"gl":1.2},{"n":"Hemp hearts","c":"nuts","gi":0,"cb":2.6,"sg":30,"sl":"3 tbsp (30 g)","cs":0.8,"gl":0.0},{"n":"Peanut butter, natural","c":"nuts","gi":14,"cb":12.0,"sg":32,"sl":"2 tbsp (32 g)","cs":3.8,"gl":0.5},{"n":"Almond butter","c":"nuts","gi":15,"cb":10.5,"sg":32,"sl":"2 tbsp (32 g)","cs":3.4,"gl":0.5},{"n":"Tahini","c":"nuts","gi":15,"cb":7.8,"sg":30,"sl":"2 tbsp (30 g)","cs":2.3,"gl":0.3},{"n":"Glucose","c":"baking","gi":100,"cb":100.0,"sg":10,"sl":"1 tsp (10 g)","cs":10.0,"gl":10.0},{"n":"White sugar (sucrose)","c":"baking","gi":65,"cb":100.0,"sg":4,"sl":"1 tsp (4 g)","cs":4.0,"gl":2.6},{"n":"Brown sugar","c":"baking","gi":64,"cb":98.0,"sg":4,"sl":"1 tsp (4 g)","cs":3.9,"gl":2.5},{"n":"Coconut sugar","c":"baking","gi":54,"cb":92.0,"sg":4,"sl":"1 tsp (4 g)","cs":3.7,"gl":2.0},{"n":"Honey","c":"baking","gi":58,"cb":82.0,"sg":21,"sl":"1 tbsp (21 g)","cs":17.2,"gl":10.0},{"n":"Maple syrup","c":"baking","gi":54,"cb":67.0,"sg":20,"sl":"1 tbsp (20 g)","cs":13.4,"gl":7.2},{"n":"Agave nectar","c":"baking","gi":15,"cb":76.0,"sg":21,"sl":"1 tbsp (21 g)","cs":16.0,"gl":2.4},{"n":"Molasses","c":"baking","gi":55,"cb":75.0,"sg":20,"sl":"1 tbsp (20 g)","cs":15.0,"gl":8.3},{"n":"High-fructose corn syrup","c":"baking","gi":68,"cb":76.0,"sg":20,"sl":"1 tbsp (20 g)","cs":15.2,"gl":10.3},{"n":"Fructose","c":"baking","gi":15,"cb":100.0,"sg":4,"sl":"1 tsp (4 g)","cs":4.0,"gl":0.6},{"n":"Stevia (pure extract)","c":"baking","gi":0,"cb":0,"sg":1,"sl":"1 packet (1 g)","cs":0.0,"gl":0.0},{"n":"Monk fruit sweetener","c":"baking","gi":0,"cb":0,"sg":1,"sl":"1 packet (1 g)","cs":0.0,"gl":0.0},{"n":"Erythritol","c":"baking","gi":0,"cb":0,"sg":4,"sl":"1 tsp (4 g)","cs":0.0,"gl":0.0},{"n":"Xylitol","c":"baking","gi":13,"cb":0,"sg":4,"sl":"1 tsp (4 g)","cs":0.0,"gl":0.0},{"n":"White wheat flour","c":"baking","gi":85,"cb":76.0,"sg":30,"sl":"1/4 cup (30 g)","cs":22.8,"gl":19.4},{"n":"Whole wheat flour","c":"baking","gi":70,"cb":64.0,"sg":30,"sl":"1/4 cup (30 g)","cs":19.2,"gl":13.4},{"n":"Almond flour","c":"baking","gi":1,"cb":3.5,"sg":28,"sl":"1/4 cup (28 g)","cs":1.0,"gl":0.0},{"n":"Coconut flour","c":"baking","gi":51,"cb":21.0,"sg":14,"sl":"2 tbsp (14 g)","cs":2.9,"gl":1.5},{"n":"White bread","c":"baking","gi":75,"cb":49.0,"sg":30,"sl":"1 slice (30 g)","cs":14.7,"gl":11.0},{"n":"Baguette, white","c":"baking","gi":95,"cb":55.0,"sg":30,"sl":"1 slice (30 g)","cs":16.5,"gl":15.7},{"n":"Croissant","c":"baking","gi":67,"cb":45.8,"sg":57,"sl":"1 croissant (57 g)","cs":26.1,"gl":17.5},{"n":"Doughnut, glazed","c":"baking","gi":76,"cb":50.0,"sg":60,"sl":"1 doughnut (60 g)","cs":30.0,"gl":22.8},{"n":"Blueberry muffin","c":"baking","gi":59,"cb":50.0,"sg":113,"sl":"1 muffin (113 g)","cs":56.5,"gl":33.3},{"n":"Sponge cake","c":"baking","gi":46,"cb":54.0,"sg":63,"sl":"1 slice (63 g)","cs":34.0,"gl":15.6},{"n":"Chocolate chip cookie","c":"baking","gi":64,"cb":63.0,"sg":32,"sl":"2 cookies (32 g)","cs":20.2,"gl":12.9},{"n":"Digestive biscuit","c":"baking","gi":59,"cb":66.0,"sg":30,"sl":"2 biscuits (30 g)","cs":19.8,"gl":11.7},{"n":"Graham crackers","c":"baking","gi":74,"cb":72.0,"sg":28,"sl":"2 sheets (28 g)","cs":20.2,"gl":14.9},{"n":"Pancake, from mix","c":"baking","gi":66,"cb":28.0,"sg":77,"sl":"2 pancakes (77 g)","cs":21.6,"gl":14.3},{"n":"Waffle, frozen","c":"baking","gi":76,"cb":33.0,"sg":70,"sl":"1 waffle (70 g)","cs":23.1,"gl":17.6},{"n":"Pretzels","c":"baking","gi":83,"cb":78.0,"sg":28,"sl":"1 oz (28 g)","cs":21.8,"gl":18.1},{"n":"Dark chocolate, 70%","c":"baking","gi":23,"cb":34.0,"sg":28,"sl":"1 oz (28 g)","cs":9.5,"gl":2.2},{"n":"Milk chocolate","c":"baking","gi":45,"cb":54.0,"sg":28,"sl":"1 oz (28 g)","cs":15.1,"gl":6.8},{"n":"Cinnamon, ground","c":"spice","gi":0,"cb":25.0,"sg":2.6,"sl":"1 tsp (2.6 g)","cs":0.7,"gl":0.0},{"n":"Turmeric, ground","c":"spice","gi":0,"cb":44.0,"sg":3,"sl":"1 tsp (3 g)","cs":1.3,"gl":0.0},{"n":"Ginger, ground","c":"spice","gi":0,"cb":58.0,"sg":1.8,"sl":"1 tsp (1.8 g)","cs":1.0,"gl":0.0},{"n":"Black pepper","c":"spice","gi":0,"cb":38.0,"sg":2.3,"sl":"1 tsp (2.3 g)","cs":0.9,"gl":0.0},{"n":"Cumin, ground","c":"spice","gi":0,"cb":33.7,"sg":2.1,"sl":"1 tsp (2.1 g)","cs":0.7,"gl":0.0},{"n":"Paprika","c":"spice","gi":0,"cb":19.0,"sg":2.3,"sl":"1 tsp (2.3 g)","cs":0.4,"gl":0.0},{"n":"Chili powder","c":"spice","gi":0,"cb":20.0,"sg":2.7,"sl":"1 tsp (2.7 g)","cs":0.5,"gl":0.0},{"n":"Cayenne pepper","c":"spice","gi":0,"cb":25.0,"sg":1.8,"sl":"1 tsp (1.8 g)","cs":0.5,"gl":0.0},{"n":"Curry powder","c":"spice","gi":0,"cb":25.0,"sg":2,"sl":"1 tsp (2 g)","cs":0.5,"gl":0.0},{"n":"Oregano, dried","c":"spice","gi":0,"cb":21.6,"sg":1,"sl":"1 tsp (1 g)","cs":0.2,"gl":0.0},{"n":"Basil, dried","c":"spice","gi":0,"cb":18.0,"sg":0.7,"sl":"1 tsp (0.7 g)","cs":0.1,"gl":0.0},{"n":"Thyme, dried","c":"spice","gi":0,"cb":26.0,"sg":1,"sl":"1 tsp (1 g)","cs":0.3,"gl":0.0},{"n":"Rosemary, dried","c":"spice","gi":0,"cb":20.7,"sg":1.2,"sl":"1 tsp (1.2 g)","cs":0.2,"gl":0.0},{"n":"Garlic powder","c":"spice","gi":0,"cb":63.0,"sg":3.1,"sl":"1 tsp (3.1 g)","cs":2.0,"gl":0.0},{"n":"Onion powder","c":"spice","gi":0,"cb":64.0,"sg":2.4,"sl":"1 tsp (2.4 g)","cs":1.5,"gl":0.0},{"n":"Nutmeg, ground","c":"spice","gi":0,"cb":29.0,"sg":2.2,"sl":"1 tsp (2.2 g)","cs":0.6,"gl":0.0},{"n":"Cardamom, ground","c":"spice","gi":0,"cb":40.5,"sg":2,"sl":"1 tsp (2 g)","cs":0.8,"gl":0.0},{"n":"Cloves, ground","c":"spice","gi":0,"cb":32.0,"sg":2.1,"sl":"1 tsp (2.1 g)","cs":0.7,"gl":0.0},{"n":"Salt","c":"spice","gi":0,"cb":0,"sg":6,"sl":"1 tsp (6 g)","cs":0.0,"gl":0.0},{"n":"Apple cider vinegar","c":"spice","gi":0,"cb":0.9,"sg":15,"sl":"1 tbsp (15 ml)","cs":0.1,"gl":0.0},{"n":"Balsamic vinegar","c":"spice","gi":0,"cb":17.0,"sg":16,"sl":"1 tbsp (16 ml)","cs":2.7,"gl":0.0},{"n":"Soy sauce","c":"spice","gi":0,"cb":4.9,"sg":18,"sl":"1 tbsp (18 ml)","cs":0.9,"gl":0.0},{"n":"Mustard, prepared","c":"spice","gi":0,"cb":5.3,"sg":15,"sl":"1 tbsp (15 g)","cs":0.8,"gl":0.0},{"n":"Hot sauce","c":"spice","gi":0,"cb":1.8,"sg":15,"sl":"1 tbsp (15 ml)","cs":0.3,"gl":0.0},{"n":"Mayonnaise","c":"spice","gi":0,"cb":0.6,"sg":14,"sl":"1 tbsp (14 g)","cs":0.1,"gl":0.0},{"n":"Ketchup","c":"spice","gi":55,"cb":25.8,"sg":17,"sl":"1 tbsp (17 g)","cs":4.4,"gl":2.4},{"n":"BBQ sauce","c":"spice","gi":60,"cb":40.0,"sg":32,"sl":"2 tbsp (32 g)","cs":12.8,"gl":7.7},{"n":"Extra virgin olive oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Avocado oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Coconut oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"MCT oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Butter","c":"oil","gi":0,"cb":0.1,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"Ghee","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"Lard","c":"oil","gi":0,"cb":0,"sg":13,"sl":"1 tbsp (13 g)","cs":0.0,"gl":0.0},{"n":"Duck fat","c":"oil","gi":0,"cb":0,"sg":13,"sl":"1 tbsp (13 g)","cs":0.0,"gl":0.0},{"n":"Sesame oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Canola oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Sunflower oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Peanut oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Flaxseed oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Walnut oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Margarine","c":"oil","gi":0,"cb":0.1,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"Chicken drumstick","c":"animal","gi":0,"cb":0,"sg":100,"sl":"1 drumstick (100 g)","cs":0.0,"gl":0.0},{"n":"Chicken wings","c":"animal","gi":0,"cb":0,"sg":100,"sl":"4 wings (100 g)","cs":0.0,"gl":0.0},{"n":"Rotisserie chicken","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 serving (120 g)","cs":0.0,"gl":0.0},{"n":"Turkey, ground","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 serving (113 g)","cs":0.0,"gl":0.0},{"n":"Beef ribeye","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 steak (120 g)","cs":0.0,"gl":0.0},{"n":"Beef brisket","c":"animal","gi":0,"cb":0,"sg":120,"sl":"1 serving (120 g)","cs":0.0,"gl":0.0},{"n":"Beef, ground 95% lean","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 patty (113 g)","cs":0.0,"gl":0.0},{"n":"Pork belly","c":"animal","gi":0,"cb":0,"sg":100,"sl":"1 serving (100 g)","cs":0.0,"gl":0.0},{"n":"Pork sausage","c":"animal","gi":0,"cb":1.5,"sg":85,"sl":"2 links (85 g)","cs":1.3,"gl":0.0},{"n":"Chorizo","c":"animal","gi":0,"cb":2.0,"sg":60,"sl":"1 serving (60 g)","cs":1.2,"gl":0.0},{"n":"Salami","c":"animal","gi":0,"cb":1.6,"sg":28,"sl":"5 slices (28 g)","cs":0.4,"gl":0.0},{"n":"Prosciutto","c":"animal","gi":0,"cb":0.4,"sg":28,"sl":"3 slices (28 g)","cs":0.1,"gl":0.0},{"n":"Pepperoni","c":"animal","gi":0,"cb":1.2,"sg":28,"sl":"14 slices (28 g)","cs":0.3,"gl":0.0},{"n":"Halibut","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Sea bass","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Haddock","c":"animal","gi":0,"cb":0,"sg":113,"sl":"1 fillet (113 g)","cs":0.0,"gl":0.0},{"n":"Herring, pickled","c":"animal","gi":0,"cb":5.0,"sg":85,"sl":"1 serving (85 g)","cs":4.3,"gl":0.0},{"n":"Crab meat","c":"animal","gi":0,"cb":0,"sg":85,"sl":"1 serving (85 g)","cs":0.0,"gl":0.0},{"n":"Lobster","c":"animal","gi":0,"cb":1.3,"sg":85,"sl":"1 serving (85 g)","cs":1.1,"gl":0.0},{"n":"Octopus","c":"animal","gi":0,"cb":4.4,"sg":85,"sl":"1 serving (85 g)","cs":3.7,"gl":0.0},{"n":"Squid / calamari","c":"animal","gi":0,"cb":3.1,"sg":85,"sl":"1 serving (85 g)","cs":2.6,"gl":0.0},{"n":"Oysters","c":"animal","gi":0,"cb":4.9,"sg":85,"sl":"6 oysters (85 g)","cs":4.2,"gl":0.0},{"n":"Clams","c":"animal","gi":0,"cb":4.4,"sg":85,"sl":"1 serving (85 g)","cs":3.7,"gl":0.0},{"n":"Bone broth","c":"animal","gi":0,"cb":0.4,"sg":240,"sl":"1 cup (240 ml)","cs":1.0,"gl":0.0},{"n":"Tofu, smoked","c":"plant","gi":15,"cb":3.0,"sg":100,"sl":"1 serving (100 g)","cs":3.0,"gl":0.5},{"n":"Tofu skin (yuba)","c":"plant","gi":15,"cb":12.0,"sg":50,"sl":"1 serving (50 g)","cs":6.0,"gl":0.9},{"n":"Soy curls, dry","c":"plant","gi":25,"cb":29.0,"sg":30,"sl":"1/2 cup dry (30 g)","cs":8.7,"gl":2.2},{"n":"Vital wheat gluten flour","c":"plant","gi":25,"cb":14.0,"sg":30,"sl":"1/4 cup (30 g)","cs":4.2,"gl":1.1},{"n":"Black bean burger","c":"plant","gi":45,"cb":20.0,"sg":71,"sl":"1 patty (71 g)","cs":14.2,"gl":6.4},{"n":"Falafel","c":"plant","gi":45,"cb":25.0,"sg":60,"sl":"3 balls (60 g)","cs":15.0,"gl":6.8},{"n":"Hemp protein powder","c":"plant","gi":25,"cb":10.0,"sg":30,"sl":"1 scoop (30 g)","cs":3.0,"gl":0.8},{"n":"Brown rice protein powder","c":"plant","gi":30,"cb":8.0,"sg":30,"sl":"1 scoop (30 g)","cs":2.4,"gl":0.7},{"n":"Mycoprotein pieces","c":"plant","gi":25,"cb":4.5,"sg":100,"sl":"1 serving (100 g)","cs":4.5,"gl":1.1},{"n":"Pea milk, unsweetened","c":"plant","gi":30,"cb":1.0,"sg":240,"sl":"1 cup (240 ml)","cs":2.4,"gl":0.7},{"n":"Apple, dried","c":"fruit","gi":29,"cb":57.0,"sg":30,"sl":"1/4 cup (30 g)","cs":17.1,"gl":5.0},{"n":"Applesauce, unsweetened","c":"fruit","gi":44,"cb":10.0,"sg":122,"sl":"1/2 cup (122 g)","cs":12.2,"gl":5.4},{"n":"Banana chips, dried","c":"fruit","gi":55,"cb":58.0,"sg":30,"sl":"1/4 cup (30 g)","cs":17.4,"gl":9.6},{"n":"Cranberries, fresh","c":"fruit","gi":45,"cb":8.4,"sg":100,"sl":"1 cup (100 g)","cs":8.4,"gl":3.8},{"n":"Peaches, canned in juice","c":"fruit","gi":45,"cb":12.0,"sg":124,"sl":"1/2 cup (124 g)","cs":14.9,"gl":6.7},{"n":"Pears, canned in juice","c":"fruit","gi":44,"cb":12.4,"sg":124,"sl":"1/2 cup (124 g)","cs":15.4,"gl":6.8},{"n":"Fruit cocktail, canned in syrup","c":"fruit","gi":55,"cb":18.0,"sg":124,"sl":"1/2 cup (124 g)","cs":22.3,"gl":12.3},{"n":"Mandarin segments, canned","c":"fruit","gi":47,"cb":14.0,"sg":124,"sl":"1/2 cup (124 g)","cs":17.4,"gl":8.2},{"n":"Cranberry sauce, canned","c":"fruit","gi":70,"cb":36.0,"sg":70,"sl":"1/4 cup (70 g)","cs":25.2,"gl":17.6},{"n":"Persimmon","c":"fruit","gi":50,"cb":15.5,"sg":168,"sl":"1 fruit (168 g)","cs":26.0,"gl":13.0},{"n":"Star fruit","c":"fruit","gi":35,"cb":4.0,"sg":108,"sl":"1 fruit (108 g)","cs":4.3,"gl":1.5},{"n":"Jackfruit","c":"fruit","gi":50,"cb":22.0,"sg":150,"sl":"1 cup (150 g)","cs":33.0,"gl":16.5},{"n":"Durian","c":"fruit","gi":49,"cb":23.0,"sg":100,"sl":"1 serving (100 g)","cs":23.0,"gl":11.3},{"n":"Dragon fruit","c":"fruit","gi":48,"cb":9.0,"sg":100,"sl":"1 serving (100 g)","cs":9.0,"gl":4.3},{"n":"Cherimoya","c":"fruit","gi":54,"cb":15.0,"sg":100,"sl":"1 serving (100 g)","cs":15.0,"gl":8.1},{"n":"Blackcurrants","c":"fruit","gi":40,"cb":13.0,"sg":112,"sl":"1 cup (112 g)","cs":14.6,"gl":5.8},{"n":"Gooseberries","c":"fruit","gi":25,"cb":7.0,"sg":150,"sl":"1 cup (150 g)","cs":10.5,"gl":2.6},{"n":"Mulberries","c":"fruit","gi":45,"cb":8.1,"sg":140,"sl":"1 cup (140 g)","cs":11.3,"gl":5.1},{"n":"Dates, Deglet Noor","c":"fruit","gi":42,"cb":72.0,"sg":24,"sl":"3 dates (24 g)","cs":17.3,"gl":7.3},{"n":"Coconut water","c":"fruit","gi":55,"cb":3.7,"sg":240,"sl":"1 cup (240 ml)","cs":8.9,"gl":4.9},{"n":"Iceberg lettuce","c":"veg","gi":15,"cb":1.8,"sg":72,"sl":"1 cup (72 g)","cs":1.3,"gl":0.2},{"n":"Watercress","c":"veg","gi":15,"cb":0.4,"sg":34,"sl":"1 cup (34 g)","cs":0.1,"gl":0.0},{"n":"Endive","c":"veg","gi":15,"cb":0.3,"sg":50,"sl":"1 cup (50 g)","cs":0.2,"gl":0.0},{"n":"Fennel bulb","c":"veg","gi":15,"cb":4.2,"sg":87,"sl":"1 cup (87 g)","cs":3.7,"gl":0.6},{"n":"Collard greens","c":"veg","gi":15,"cb":2.1,"sg":36,"sl":"1 cup (36 g)","cs":0.8,"gl":0.1},{"n":"Mustard greens","c":"veg","gi":15,"cb":1.5,"sg":56,"sl":"1 cup (56 g)","cs":0.8,"gl":0.1},{"n":"Sauerkraut","c":"veg","gi":15,"cb":1.8,"sg":142,"sl":"1 cup (142 g)","cs":2.6,"gl":0.4},{"n":"Kimchi","c":"veg","gi":15,"cb":1.6,"sg":150,"sl":"1 cup (150 g)","cs":2.4,"gl":0.4},{"n":"Pickles, dill","c":"veg","gi":15,"cb":1.2,"sg":65,"sl":"1 spear (65 g)","cs":0.8,"gl":0.1},{"n":"Bell pepper, green","c":"veg","gi":15,"cb":3.0,"sg":149,"sl":"1 cup (149 g)","cs":4.5,"gl":0.7},{"n":"Jalapeño","c":"veg","gi":15,"cb":4.1,"sg":45,"sl":"2 peppers (45 g)","cs":1.8,"gl":0.3},{"n":"Spaghetti squash, cooked","c":"veg","gi":20,"cb":5.5,"sg":155,"sl":"1 cup (155 g)","cs":8.5,"gl":1.7},{"n":"Acorn squash, baked","c":"veg","gi":40,"cb":13.0,"sg":205,"sl":"1 cup cubed (205 g)","cs":26.7,"gl":10.7},{"n":"Zucchini noodles","c":"veg","gi":15,"cb":2.1,"sg":124,"sl":"1 cup (124 g)","cs":2.6,"gl":0.4},{"n":"Cauliflower rice","c":"veg","gi":15,"cb":3.0,"sg":100,"sl":"1 cup (100 g)","cs":3.0,"gl":0.5},{"n":"Sweet potato fries","c":"veg","gi":76,"cb":26.0,"sg":100,"sl":"1 serving (100 g)","cs":26.0,"gl":19.8},{"n":"Potato chips","c":"veg","gi":56,"cb":50.0,"sg":28,"sl":"1 oz (28 g)","cs":14.0,"gl":7.8},{"n":"Hash browns","c":"veg","gi":75,"cb":27.0,"sg":100,"sl":"1 serving (100 g)","cs":27.0,"gl":20.3},{"n":"Potato, roasted","c":"veg","gi":82,"cb":20.0,"sg":150,"sl":"1 serving (150 g)","cs":30.0,"gl":24.6},{"n":"Tomato, sun-dried","c":"veg","gi":15,"cb":44.0,"sg":30,"sl":"1/4 cup (30 g)","cs":13.2,"gl":2.0},{"n":"Tomato paste","c":"veg","gi":30,"cb":15.0,"sg":33,"sl":"2 tbsp (33 g)","cs":5.0,"gl":1.5},{"n":"Tomato sauce, canned","c":"veg","gi":38,"cb":6.0,"sg":122,"sl":"1/2 cup (122 g)","cs":7.3,"gl":2.8},{"n":"Pumpkin, canned","c":"veg","gi":75,"cb":7.0,"sg":122,"sl":"1/2 cup (122 g)","cs":8.5,"gl":6.4},{"n":"Beetroot, raw","c":"veg","gi":61,"cb":7.9,"sg":136,"sl":"1 cup (136 g)","cs":10.7,"gl":6.5},{"n":"Whole wheat bagel","c":"grain","gi":72,"cb":48.0,"sg":98,"sl":"1 bagel (98 g)","cs":47.0,"gl":33.8},{"n":"White bagel","c":"grain","gi":72,"cb":53.0,"sg":98,"sl":"1 bagel (98 g)","cs":51.9,"gl":37.4},{"n":"Multigrain bread","c":"grain","gi":48,"cb":42.0,"sg":32,"sl":"1 slice (32 g)","cs":13.4,"gl":6.4},{"n":"Oat bran bread","c":"grain","gi":47,"cb":41.0,"sg":32,"sl":"1 slice (32 g)","cs":13.1,"gl":6.2},{"n":"Rye bread, light","c":"grain","gi":68,"cb":45.0,"sg":32,"sl":"1 slice (32 g)","cs":14.4,"gl":9.8},{"n":"Naan / flatbread","c":"grain","gi":71,"cb":50.0,"sg":60,"sl":"1 piece (60 g)","cs":30.0,"gl":21.3},{"n":"Whole wheat English muffin","c":"grain","gi":67,"cb":43.0,"sg":57,"sl":"1 muffin (57 g)","cs":24.5,"gl":16.4},{"n":"Pasta, cooked soft","c":"grain","gi":58,"cb":28.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":39.2,"gl":22.7},{"n":"Macaroni, cooked","c":"grain","gi":47,"cb":28.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":39.2,"gl":18.4},{"n":"Egg noodles, cooked","c":"grain","gi":40,"cb":25.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":40.0,"gl":16.0},{"n":"Ramen noodles, instant","c":"grain","gi":47,"cb":26.0,"sg":190,"sl":"1 pack cooked (190 g)","cs":49.4,"gl":23.2},{"n":"Semolina, cooked","c":"grain","gi":55,"cb":13.0,"sg":167,"sl":"1 cup cooked (167 g)","cs":21.7,"gl":11.9},{"n":"Wheat bran, raw","c":"grain","gi":42,"cb":20.0,"sg":15,"sl":"2 tbsp (15 g)","cs":3.0,"gl":1.3},{"n":"Wheat biscuit cereal","c":"grain","gi":74,"cb":68.0,"sg":38,"sl":"2 biscuits (38 g)","cs":25.8,"gl":19.1},{"n":"Instant porridge sachet","c":"grain","gi":83,"cb":63.0,"sg":35,"sl":"1 sachet (35 g)","cs":22.1,"gl":18.3},{"n":"Whole wheat couscous, cooked","c":"grain","gi":65,"cb":21.0,"sg":157,"sl":"1 cup cooked (157 g)","cs":33.0,"gl":21.5},{"n":"Red rice, cooked","c":"gf","gi":55,"cb":25.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":40.0,"gl":22.0},{"n":"Black rice, cooked","c":"gf","gi":42,"cb":23.0,"sg":160,"sl":"1 cup cooked (160 g)","cs":36.8,"gl":15.5},{"n":"Parboiled rice, cooked","c":"gf","gi":47,"cb":26.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":41.1,"gl":19.3},{"n":"Arborio risotto rice, cooked","c":"gf","gi":69,"cb":28.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":44.2,"gl":30.5},{"n":"Instant rice, cooked","c":"gf","gi":87,"cb":25.0,"sg":158,"sl":"1 cup cooked (158 g)","cs":39.5,"gl":34.4},{"n":"Rice porridge / congee","c":"gf","gi":78,"cb":10.0,"sg":240,"sl":"1 cup (240 g)","cs":24.0,"gl":18.7},{"n":"Quinoa flakes","c":"gf","gi":55,"cb":64.0,"sg":30,"sl":"1/3 cup (30 g)","cs":19.2,"gl":10.6},{"n":"Buckwheat flour","c":"gf","gi":45,"cb":71.0,"sg":30,"sl":"1/4 cup (30 g)","cs":21.3,"gl":9.6},{"n":"Rice flour, white","c":"gf","gi":95,"cb":80.0,"sg":30,"sl":"1/4 cup (30 g)","cs":24.0,"gl":22.8},{"n":"Tapioca / cassava flour","c":"gf","gi":70,"cb":88.0,"sg":30,"sl":"1/4 cup (30 g)","cs":26.4,"gl":18.5},{"n":"Amaranth, cooked","c":"gf","gi":57,"cb":19.0,"sg":246,"sl":"1 cup cooked (246 g)","cs":46.7,"gl":26.6},{"n":"Masa harina / corn flour","c":"gf","gi":70,"cb":76.0,"sg":30,"sl":"1/4 cup (30 g)","cs":22.8,"gl":16.0},{"n":"Rice crackers","c":"gf","gi":87,"cb":80.0,"sg":30,"sl":"6 crackers (30 g)","cs":24.0,"gl":20.9},{"n":"Gluten-free corn pasta, cooked","c":"gf","gi":78,"cb":26.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":36.4,"gl":28.4},{"n":"Glass / cellophane noodles","c":"gf","gi":39,"cb":21.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":29.4,"gl":11.5},{"n":"Milk, 2% reduced fat","c":"dairy","gi":39,"cb":4.8,"sg":244,"sl":"1 cup (244 ml)","cs":11.7,"gl":4.6},{"n":"Buttermilk","c":"dairy","gi":39,"cb":4.8,"sg":245,"sl":"1 cup (245 ml)","cs":11.8,"gl":4.6},{"n":"Evaporated milk","c":"dairy","gi":39,"cb":10.0,"sg":60,"sl":"1/4 cup (60 ml)","cs":6.0,"gl":2.3},{"n":"Milk powder, whole","c":"dairy","gi":39,"cb":38.0,"sg":32,"sl":"1/4 cup (32 g)","cs":12.2,"gl":4.8},{"n":"Greek yogurt, 2%","c":"dairy","gi":14,"cb":4.6,"sg":170,"sl":"1 container (170 g)","cs":7.8,"gl":1.1},{"n":"Skyr","c":"dairy","gi":11,"cb":4.0,"sg":170,"sl":"1 container (170 g)","cs":6.8,"gl":0.7},{"n":"Yogurt drink, sweetened","c":"dairy","gi":38,"cb":12.0,"sg":200,"sl":"1 bottle (200 ml)","cs":24.0,"gl":9.1},{"n":"Frozen yogurt","c":"dairy","gi":51,"cb":22.0,"sg":72,"sl":"1/2 cup (72 g)","cs":15.8,"gl":8.1},{"n":"Custard","c":"dairy","gi":43,"cb":17.0,"sg":100,"sl":"1/2 cup (100 g)","cs":17.0,"gl":7.3},{"n":"Rice pudding","c":"dairy","gi":62,"cb":20.0,"sg":113,"sl":"1/2 cup (113 g)","cs":22.6,"gl":14.0},{"n":"Quark","c":"dairy","gi":15,"cb":3.6,"sg":100,"sl":"1 serving (100 g)","cs":3.6,"gl":0.5},{"n":"Mascarpone","c":"dairy","gi":0,"cb":4.8,"sg":28,"sl":"1 oz (28 g)","cs":1.3,"gl":0.0},{"n":"Gouda","c":"dairy","gi":0,"cb":2.2,"sg":28,"sl":"1 oz (28 g)","cs":0.6,"gl":0.0},{"n":"Manchego","c":"dairy","gi":0,"cb":0.5,"sg":28,"sl":"1 oz (28 g)","cs":0.1,"gl":0.0},{"n":"Camembert","c":"dairy","gi":0,"cb":0.5,"sg":28,"sl":"1 oz (28 g)","cs":0.1,"gl":0.0},{"n":"Almond milk, unsweetened","c":"dairy","gi":25,"cb":0.6,"sg":240,"sl":"1 cup (240 ml)","cs":1.4,"gl":0.4},{"n":"Oat milk","c":"dairy","gi":60,"cb":7.0,"sg":240,"sl":"1 cup (240 ml)","cs":16.8,"gl":10.1},{"n":"Coconut milk beverage","c":"dairy","gi":40,"cb":3.0,"sg":240,"sl":"1 cup (240 ml)","cs":7.2,"gl":2.9},{"n":"Rice milk","c":"dairy","gi":86,"cb":9.5,"sg":240,"sl":"1 cup (240 ml)","cs":22.8,"gl":19.6},{"n":"Cashew milk, unsweetened","c":"dairy","gi":25,"cb":1.0,"sg":240,"sl":"1 cup (240 ml)","cs":2.4,"gl":0.6},{"n":"Soy milk, sweetened","c":"dairy","gi":44,"cb":8.0,"sg":244,"sl":"1 cup (244 ml)","cs":19.5,"gl":8.6},{"n":"Coconut milk, canned","c":"dairy","gi":40,"cb":3.3,"sg":60,"sl":"1/4 cup (60 ml)","cs":2.0,"gl":0.8},{"n":"Chickpea pasta, cooked","c":"legume","gi":35,"cb":22.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":30.8,"gl":10.8},{"n":"Red lentil pasta, cooked","c":"legume","gi":35,"cb":22.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":30.8,"gl":10.8},{"n":"Black bean pasta, cooked","c":"legume","gi":30,"cb":20.0,"sg":140,"sl":"1 cup cooked (140 g)","cs":28.0,"gl":8.4},{"n":"Bean sprouts","c":"legume","gi":25,"cb":4.0,"sg":104,"sl":"1 cup (104 g)","cs":4.2,"gl":1.1},{"n":"Chickpea (gram) flour","c":"legume","gi":35,"cb":45.0,"sg":30,"sl":"1/4 cup (30 g)","cs":13.5,"gl":4.7},{"n":"Peanut flour, defatted","c":"legume","gi":20,"cb":21.0,"sg":30,"sl":"1/4 cup (30 g)","cs":6.3,"gl":1.3},{"n":"Miso paste","c":"legume","gi":30,"cb":20.0,"sg":17,"sl":"1 tbsp (17 g)","cs":3.4,"gl":1.0},{"n":"Bean dip","c":"legume","gi":35,"cb":14.0,"sg":60,"sl":"1/4 cup (60 g)","cs":8.4,"gl":2.9},{"n":"Green pea soup, thick","c":"legume","gi":60,"cb":9.0,"sg":250,"sl":"1 cup (250 g)","cs":22.5,"gl":13.5},{"n":"Peanut butter powder","c":"legume","gi":20,"cb":30.0,"sg":16,"sl":"2 tbsp (16 g)","cs":4.8,"gl":1.0},{"n":"Peanut butter, sweetened","c":"nuts","gi":40,"cb":20.0,"sg":32,"sl":"2 tbsp (32 g)","cs":6.4,"gl":2.6},{"n":"Cashew butter","c":"nuts","gi":25,"cb":26.0,"sg":32,"sl":"2 tbsp (32 g)","cs":8.3,"gl":2.1},{"n":"Sunflower seed butter","c":"nuts","gi":20,"cb":14.0,"sg":32,"sl":"2 tbsp (32 g)","cs":4.5,"gl":0.9},{"n":"Coconut, dried shredded","c":"nuts","gi":45,"cb":15.0,"sg":28,"sl":"1/4 cup (28 g)","cs":4.2,"gl":1.9},{"n":"Coconut, fresh","c":"nuts","gi":45,"cb":6.2,"sg":80,"sl":"1 cup (80 g)","cs":5.0,"gl":2.3},{"n":"Chestnuts, roasted","c":"nuts","gi":54,"cb":45.0,"sg":84,"sl":"1/2 cup (84 g)","cs":37.8,"gl":20.4},{"n":"Poppy seeds","c":"nuts","gi":35,"cb":8.6,"sg":9,"sl":"1 tbsp (9 g)","cs":0.8,"gl":0.3},{"n":"Psyllium husk","c":"nuts","gi":0,"cb":1.0,"sg":10,"sl":"1 tbsp (10 g)","cs":0.1,"gl":0.0},{"n":"Trail mix with dried fruit","c":"nuts","gi":47,"cb":45.0,"sg":40,"sl":"1/4 cup (40 g)","cs":18.0,"gl":8.5},{"n":"Honey roasted peanuts","c":"nuts","gi":30,"cb":25.0,"sg":28,"sl":"1 oz (28 g)","cs":7.0,"gl":2.1},{"n":"Powdered sugar","c":"baking","gi":65,"cb":99.0,"sg":8,"sl":"1 tbsp (8 g)","cs":7.9,"gl":5.1},{"n":"Date syrup","c":"baking","gi":47,"cb":72.0,"sg":20,"sl":"1 tbsp (20 g)","cs":14.4,"gl":6.8},{"n":"Brown rice syrup","c":"baking","gi":98,"cb":78.0,"sg":20,"sl":"1 tbsp (20 g)","cs":15.6,"gl":15.3},{"n":"Golden syrup","c":"baking","gi":63,"cb":79.0,"sg":20,"sl":"1 tbsp (20 g)","cs":15.8,"gl":10.0},{"n":"Maltodextrin","c":"baking","gi":110,"cb":95.0,"sg":10,"sl":"1 tbsp (10 g)","cs":9.5,"gl":10.5},{"n":"Maltose","c":"baking","gi":105,"cb":100.0,"sg":4,"sl":"1 tsp (4 g)","cs":4.0,"gl":4.2},{"n":"Lactose","c":"baking","gi":46,"cb":100.0,"sg":4,"sl":"1 tsp (4 g)","cs":4.0,"gl":1.8},{"n":"Allulose","c":"baking","gi":0,"cb":0,"sg":4,"sl":"1 tsp (4 g)","cs":0.0,"gl":0.0},{"n":"Sorbitol","c":"baking","gi":9,"cb":0,"sg":4,"sl":"1 tsp (4 g)","cs":0.0,"gl":0.0},{"n":"Cornstarch","c":"baking","gi":85,"cb":86.0,"sg":8,"sl":"1 tbsp (8 g)","cs":6.9,"gl":5.9},{"n":"Oat flour","c":"baking","gi":71,"cb":58.0,"sg":30,"sl":"1/4 cup (30 g)","cs":17.4,"gl":12.4},{"n":"Rye flour, whole","c":"baking","gi":45,"cb":60.0,"sg":30,"sl":"1/4 cup (30 g)","cs":18.0,"gl":8.1},{"n":"Brownie","c":"baking","gi":42,"cb":50.0,"sg":56,"sl":"1 brownie (56 g)","cs":28.0,"gl":11.8},{"n":"Cheesecake","c":"baking","gi":34,"cb":26.0,"sg":80,"sl":"1 slice (80 g)","cs":20.8,"gl":7.1},{"n":"Apple pie","c":"baking","gi":57,"cb":34.0,"sg":125,"sl":"1 slice (125 g)","cs":42.5,"gl":24.2},{"n":"Shortbread","c":"baking","gi":64,"cb":65.0,"sg":30,"sl":"2 biscuits (30 g)","cs":19.5,"gl":12.5},{"n":"Oatmeal cookie","c":"baking","gi":54,"cb":64.0,"sg":32,"sl":"2 cookies (32 g)","cs":20.5,"gl":11.1},{"n":"Wafer biscuits","c":"baking","gi":77,"cb":72.0,"sg":30,"sl":"4 wafers (30 g)","cs":21.6,"gl":16.6},{"n":"Puffed rice bar","c":"baking","gi":78,"cb":73.0,"sg":28,"sl":"1 bar (28 g)","cs":20.4,"gl":15.9},{"n":"Jelly beans","c":"baking","gi":78,"cb":93.0,"sg":28,"sl":"1 oz (28 g)","cs":26.0,"gl":20.3},{"n":"Gummy candy","c":"baking","gi":70,"cb":77.0,"sg":28,"sl":"1 oz (28 g)","cs":21.6,"gl":15.1},{"n":"Marshmallows","c":"baking","gi":62,"cb":81.0,"sg":28,"sl":"1 oz (28 g)","cs":22.7,"gl":14.1},{"n":"White chocolate","c":"baking","gi":44,"cb":59.0,"sg":28,"sl":"1 oz (28 g)","cs":16.5,"gl":7.3},{"n":"Chocolate hazelnut spread","c":"baking","gi":33,"cb":57.0,"sg":37,"sl":"2 tbsp (37 g)","cs":21.1,"gl":7.0},{"n":"Strawberry jam","c":"baking","gi":51,"cb":65.0,"sg":20,"sl":"1 tbsp (20 g)","cs":13.0,"gl":6.6},{"n":"Marmalade","c":"baking","gi":48,"cb":65.0,"sg":20,"sl":"1 tbsp (20 g)","cs":13.0,"gl":6.2},{"n":"Sriracha","c":"spice","gi":55,"cb":9.0,"sg":17,"sl":"1 tbsp (17 g)","cs":1.5,"gl":0.8},{"n":"Salsa","c":"spice","gi":30,"cb":6.0,"sg":36,"sl":"2 tbsp (36 g)","cs":2.2,"gl":0.7},{"n":"Pesto","c":"spice","gi":15,"cb":3.0,"sg":30,"sl":"2 tbsp (30 g)","cs":0.9,"gl":0.1},{"n":"Ranch dressing","c":"spice","gi":15,"cb":4.0,"sg":30,"sl":"2 tbsp (30 g)","cs":1.2,"gl":0.2},{"n":"Italian vinaigrette","c":"spice","gi":25,"cb":6.0,"sg":30,"sl":"2 tbsp (30 g)","cs":1.8,"gl":0.5},{"n":"Honey mustard","c":"spice","gi":45,"cb":15.0,"sg":15,"sl":"1 tbsp (15 g)","cs":2.3,"gl":1.0},{"n":"Teriyaki sauce","c":"spice","gi":60,"cb":16.0,"sg":18,"sl":"1 tbsp (18 ml)","cs":2.9,"gl":1.7},{"n":"Hoisin sauce","c":"spice","gi":60,"cb":44.0,"sg":16,"sl":"1 tbsp (16 g)","cs":7.0,"gl":4.2},{"n":"Oyster sauce","c":"spice","gi":55,"cb":27.0,"sg":18,"sl":"1 tbsp (18 g)","cs":4.9,"gl":2.7},{"n":"Fish sauce","c":"spice","gi":0,"cb":3.8,"sg":18,"sl":"1 tbsp (18 ml)","cs":0.7,"gl":0.0},{"n":"Worcestershire sauce","c":"spice","gi":50,"cb":20.0,"sg":17,"sl":"1 tbsp (17 ml)","cs":3.4,"gl":1.7},{"n":"Ketchup, no sugar added","c":"spice","gi":25,"cb":7.0,"sg":17,"sl":"1 tbsp (17 g)","cs":1.2,"gl":0.3},{"n":"Coconut aminos","c":"spice","gi":35,"cb":18.0,"sg":15,"sl":"1 tbsp (15 ml)","cs":2.7,"gl":0.9},{"n":"Nutritional yeast","c":"spice","gi":0,"cb":10.0,"sg":5,"sl":"1 tbsp (5 g)","cs":0.5,"gl":0.0},{"n":"Bay leaves","c":"spice","gi":0,"cb":45.0,"sg":0.6,"sl":"2 leaves (0.6 g)","cs":0.3,"gl":0.0},{"n":"Sage, dried","c":"spice","gi":0,"cb":25.0,"sg":0.7,"sl":"1 tsp (0.7 g)","cs":0.2,"gl":0.0},{"n":"Dill, dried","c":"spice","gi":0,"cb":20.0,"sg":1,"sl":"1 tsp (1 g)","cs":0.2,"gl":0.0},{"n":"Fenugreek seeds","c":"spice","gi":0,"cb":33.0,"sg":3.7,"sl":"1 tsp (3.7 g)","cs":1.2,"gl":0.0},{"n":"Star anise","c":"spice","gi":0,"cb":35.0,"sg":2,"sl":"1 tsp (2 g)","cs":0.7,"gl":0.0},{"n":"Allspice, ground","c":"spice","gi":0,"cb":32.0,"sg":1.9,"sl":"1 tsp (1.9 g)","cs":0.6,"gl":0.0},{"n":"Sumac","c":"spice","gi":0,"cb":30.0,"sg":3,"sl":"1 tsp (3 g)","cs":0.9,"gl":0.0},{"n":"Za'atar","c":"spice","gi":0,"cb":30.0,"sg":3,"sl":"1 tsp (3 g)","cs":0.9,"gl":0.0},{"n":"White pepper","c":"spice","gi":0,"cb":42.0,"sg":2.4,"sl":"1 tsp (2.4 g)","cs":1.0,"gl":0.0},{"n":"Chili flakes","c":"spice","gi":0,"cb":25.0,"sg":1.8,"sl":"1 tsp (1.8 g)","cs":0.5,"gl":0.0},{"n":"Grapeseed oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Rice bran oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Corn oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Soybean oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 ml)","cs":0.0,"gl":0.0},{"n":"Palm oil","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"Beef tallow","c":"oil","gi":0,"cb":0,"sg":13,"sl":"1 tbsp (13 g)","cs":0.0,"gl":0.0},{"n":"Cocoa butter","c":"oil","gi":0,"cb":0,"sg":14,"sl":"1 tbsp (14 g)","cs":0.0,"gl":0.0},{"n":"Vegetable shortening","c":"oil","gi":0,"cb":0,"sg":13,"sl":"1 tbsp (13 g)","cs":0.0,"gl":0.0},{"n":"Cooking spray","c":"oil","gi":0,"cb":0,"sg":1,"sl":"1 spray (1 g)","cs":0.0,"gl":0.0},{"n":"Water","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Sparkling water","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Black coffee","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Espresso","c":"bev","gi":0,"cb":0,"sg":30,"sl":"1 shot (30 ml)","cs":0.0,"gl":0.0},{"n":"Latte with whole milk","c":"bev","gi":39,"cb":4.5,"sg":350,"sl":"1 medium (350 ml)","cs":15.8,"gl":6.2},{"n":"Cappuccino","c":"bev","gi":39,"cb":4.0,"sg":180,"sl":"1 cup (180 ml)","cs":7.2,"gl":2.8},{"n":"Green tea, unsweetened","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Black tea, unsweetened","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Herbal tea","c":"bev","gi":0,"cb":0,"sg":240,"sl":"1 cup (240 ml)","cs":0.0,"gl":0.0},{"n":"Iced tea, sweetened","c":"bev","gi":65,"cb":9.0,"sg":240,"sl":"1 cup (240 ml)","cs":21.6,"gl":14.0},{"n":"Cola, regular","c":"bev","gi":63,"cb":10.6,"sg":355,"sl":"1 can (355 ml)","cs":37.6,"gl":23.7},{"n":"Cola, diet","c":"bev","gi":0,"cb":0,"sg":355,"sl":"1 can (355 ml)","cs":0.0,"gl":0.0},{"n":"Lemon-lime soda","c":"bev","gi":63,"cb":10.5,"sg":355,"sl":"1 can (355 ml)","cs":37.3,"gl":23.5},{"n":"Ginger ale","c":"bev","gi":63,"cb":9.0,"sg":355,"sl":"1 can (355 ml)","cs":32.0,"gl":20.2},{"n":"Tonic water","c":"bev","gi":63,"cb":9.0,"sg":240,"sl":"1 cup (240 ml)","cs":21.6,"gl":13.6},{"n":"Energy drink","c":"bev","gi":68,"cb":11.0,"sg":250,"sl":"1 can (250 ml)","cs":27.5,"gl":18.7},{"n":"Sports drink","c":"bev","gi":78,"cb":6.0,"sg":240,"sl":"1 cup (240 ml)","cs":14.4,"gl":11.2},{"n":"Lemonade","c":"bev","gi":54,"cb":11.0,"sg":240,"sl":"1 cup (240 ml)","cs":26.4,"gl":14.3},{"n":"Hot chocolate from mix","c":"bev","gi":51,"cb":12.0,"sg":240,"sl":"1 cup (240 ml)","cs":28.8,"gl":14.7},{"n":"Chocolate milkshake","c":"bev","gi":63,"cb":17.0,"sg":300,"sl":"1 shake (300 ml)","cs":51.0,"gl":32.1},{"n":"Smoothie, mixed berry","c":"bev","gi":46,"cb":14.0,"sg":250,"sl":"1 glass (250 ml)","cs":35.0,"gl":16.1},{"n":"Vegetable juice, green","c":"bev","gi":35,"cb":5.0,"sg":240,"sl":"1 cup (240 ml)","cs":12.0,"gl":4.2},{"n":"Cranberry juice cocktail","c":"bev","gi":68,"cb":13.0,"sg":248,"sl":"1 cup (248 ml)","cs":32.2,"gl":21.9},{"n":"Grape juice, unsweetened","c":"bev","gi":48,"cb":14.8,"sg":248,"sl":"1 cup (248 ml)","cs":36.7,"gl":17.6},{"n":"Pineapple juice","c":"bev","gi":46,"cb":12.9,"sg":248,"sl":"1 cup (248 ml)","cs":32.0,"gl":14.7},{"n":"Tomato juice","c":"bev","gi":38,"cb":3.6,"sg":243,"sl":"1 cup (243 ml)","cs":8.7,"gl":3.3},{"n":"Prune juice","c":"bev","gi":43,"cb":17.0,"sg":256,"sl":"1 cup (256 ml)","cs":43.5,"gl":18.7},{"n":"Kombucha","c":"bev","gi":45,"cb":3.0,"sg":240,"sl":"1 cup (240 ml)","cs":7.2,"gl":3.2},{"n":"Beer, regular","c":"bev","gi":66,"cb":3.6,"sg":355,"sl":"1 bottle (355 ml)","cs":12.8,"gl":8.4},{"n":"Beer, light","c":"bev","gi":66,"cb":1.6,"sg":355,"sl":"1 bottle (355 ml)","cs":5.7,"gl":3.8},{"n":"Red wine","c":"bev","gi":0,"cb":2.6,"sg":150,"sl":"1 glass (150 ml)","cs":3.9,"gl":0.0},{"n":"White wine, dry","c":"bev","gi":0,"cb":2.6,"sg":150,"sl":"1 glass (150 ml)","cs":3.9,"gl":0.0},{"n":"Sparkling wine","c":"bev","gi":0,"cb":1.6,"sg":150,"sl":"1 glass (150 ml)","cs":2.4,"gl":0.0},{"n":"Spirits, unmixed","c":"bev","gi":0,"cb":0,"sg":44,"sl":"1 shot (44 ml)","cs":0.0,"gl":0.0},{"n":"Sweet liqueur","c":"bev","gi":55,"cb":30.0,"sg":44,"sl":"1 shot (44 ml)","cs":13.2,"gl":7.3},{"n":"Meal replacement shake","c":"bev","gi":40,"cb":15.0,"sg":325,"sl":"1 bottle (325 ml)","cs":48.8,"gl":19.5},{"n":"Whey protein shake in water","c":"bev","gi":30,"cb":3.0,"sg":300,"sl":"1 shake (300 ml)","cs":9.0,"gl":2.7},{"n":"Pizza, cheese","c":"prep","gi":60,"cb":26.0,"sg":107,"sl":"1 slice (107 g)","cs":27.8,"gl":16.7},{"n":"Pizza, thin crust vegetable","c":"prep","gi":49,"cb":25.0,"sg":100,"sl":"1 slice (100 g)","cs":25.0,"gl":12.3},{"n":"Frozen pizza, pepperoni","c":"prep","gi":63,"cb":28.0,"sg":140,"sl":"1 serving (140 g)","cs":39.2,"gl":24.7},{"n":"Cheeseburger, fast food","c":"prep","gi":61,"cb":28.0,"sg":150,"sl":"1 burger (150 g)","cs":42.0,"gl":25.6},{"n":"Chicken nuggets","c":"prep","gi":46,"cb":16.0,"sg":100,"sl":"6 pieces (100 g)","cs":16.0,"gl":7.4},{"n":"Fish sticks, breaded","c":"prep","gi":38,"cb":20.0,"sg":100,"sl":"5 sticks (100 g)","cs":20.0,"gl":7.6},{"n":"Hot dog with bun","c":"prep","gi":63,"cb":22.0,"sg":120,"sl":"1 hot dog (120 g)","cs":26.4,"gl":16.6},{"n":"Beef taco, hard shell","c":"prep","gi":55,"cb":15.0,"sg":100,"sl":"1 taco (100 g)","cs":15.0,"gl":8.3},{"n":"Chicken burrito","c":"prep","gi":56,"cb":28.0,"sg":220,"sl":"1 burrito (220 g)","cs":61.6,"gl":34.5},{"n":"Sushi roll, salmon","c":"prep","gi":55,"cb":30.0,"sg":170,"sl":"6 pieces (170 g)","cs":51.0,"gl":28.1},{"n":"Poke / rice bowl","c":"prep","gi":62,"cb":25.0,"sg":350,"sl":"1 bowl (350 g)","cs":87.5,"gl":54.3},{"n":"Pad thai","c":"prep","gi":60,"cb":25.0,"sg":300,"sl":"1 plate (300 g)","cs":75.0,"gl":45.0},{"n":"Fried rice","c":"prep","gi":73,"cb":30.0,"sg":250,"sl":"1 cup (250 g)","cs":75.0,"gl":54.8},{"n":"Spring rolls, fried","c":"prep","gi":55,"cb":20.0,"sg":80,"sl":"2 rolls (80 g)","cs":16.0,"gl":8.8},{"n":"Lasagne, beef","c":"prep","gi":47,"cb":15.0,"sg":250,"sl":"1 portion (250 g)","cs":37.5,"gl":17.6},{"n":"Macaroni and cheese","c":"prep","gi":64,"cb":18.0,"sg":200,"sl":"1 cup (200 g)","cs":36.0,"gl":23.0},{"n":"Shepherd's pie","c":"prep","gi":66,"cb":12.0,"sg":250,"sl":"1 portion (250 g)","cs":30.0,"gl":19.8},{"n":"Chili con carne","c":"prep","gi":35,"cb":10.0,"sg":250,"sl":"1 cup (250 g)","cs":25.0,"gl":8.8},{"n":"Beef stew","c":"prep","gi":40,"cb":7.0,"sg":250,"sl":"1 cup (250 g)","cs":17.5,"gl":7.0},{"n":"Chicken noodle soup","c":"prep","gi":48,"cb":6.0,"sg":245,"sl":"1 cup (245 g)","cs":14.7,"gl":7.1},{"n":"Tomato soup, canned","c":"prep","gi":38,"cb":7.0,"sg":245,"sl":"1 cup (245 g)","cs":17.2,"gl":6.5},{"n":"Lentil soup, canned","c":"prep","gi":44,"cb":8.0,"sg":245,"sl":"1 cup (245 g)","cs":19.6,"gl":8.6},{"n":"Minestrone soup","c":"prep","gi":39,"cb":7.0,"sg":245,"sl":"1 cup (245 g)","cs":17.2,"gl":6.7},{"n":"Frozen lasagne meal","c":"prep","gi":50,"cb":16.0,"sg":280,"sl":"1 meal (280 g)","cs":44.8,"gl":22.4},{"n":"Instant noodle cup","c":"prep","gi":52,"cb":25.0,"sg":220,"sl":"1 cup (220 g)","cs":55.0,"gl":28.6},{"n":"Breakfast cereal bar","c":"prep","gi":72,"cb":70.0,"sg":37,"sl":"1 bar (37 g)","cs":25.9,"gl":18.6},{"n":"Granola bar, chewy","c":"prep","gi":61,"cb":64.0,"sg":35,"sl":"1 bar (35 g)","cs":22.4,"gl":13.7},{"n":"Protein bar","c":"prep","gi":45,"cb":40.0,"sg":60,"sl":"1 bar (60 g)","cs":24.0,"gl":10.8},{"n":"Tortilla / corn chips","c":"prep","gi":63,"cb":60.0,"sg":28,"sl":"1 oz (28 g)","cs":16.8,"gl":10.6},{"n":"Cheese puffs","c":"prep","gi":74,"cb":54.0,"sg":28,"sl":"1 oz (28 g)","cs":15.1,"gl":11.2},{"n":"Popcorn, microwave butter","c":"prep","gi":72,"cb":50.0,"sg":30,"sl":"3 cups (30 g)","cs":15.0,"gl":10.8},{"n":"Egg and cheese breakfast sandwich","c":"prep","gi":55,"cb":30.0,"sg":150,"sl":"1 sandwich (150 g)","cs":45.0,"gl":24.8},{"n":"Club sandwich, white bread","c":"prep","gi":60,"cb":32.0,"sg":200,"sl":"1 sandwich (200 g)","cs":64.0,"gl":38.4},{"n":"Caesar salad with chicken","c":"prep","gi":25,"cb":8.0,"sg":300,"sl":"1 bowl (300 g)","cs":24.0,"gl":6.0}];
+var CATS = {animal:"Animal Proteins",plant:"Plant Proteins",fruit:"Fruits",veg:"Vegetables",grain:"Whole Grains",gf:"Gluten-Free Grains",dairy:"Dairy & Alternatives",legume:"Legumes & Beans",nuts:"Nuts & Seeds",baking:"Baking & Sweeteners",spice:"Spices & Seasonings",oil:"Oils & Fats",bev:"Beverages",prep:"Prepared & Packaged"};
+var CATORDER = ["animal","plant","fruit","veg","grain","gf","legume","nuts","dairy","bev","baking","spice","oil","prep"];
+var $ = function(s){return document.querySelector(s)};
+
+/* ---------- branding ---------- */
+document.title = BRAND.name + " — Glycemic Index & Load Companion";
+if(BRAND.accent){document.documentElement.style.setProperty("--accent",BRAND.accent);}
+if(BRAND.accentSoft){document.documentElement.style.setProperty("--accent-soft",BRAND.accentSoft);}
+$("#credit").innerHTML = BRAND.creditLine ? "<strong>"+esc(BRAND.name)+"</strong>"+esc(BRAND.creditLine) : "";
+$("#footbrand").textContent = BRAND.footer || "";
+$("#foodCount").textContent = FOODS.length;
+$("#catCount").textContent = Object.keys(CATS).length;
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+/* ---------- ratings ---------- */
+function giLevel(gi,carbs){ if(carbs<=0.5) return "zero"; if(gi<=55) return "low"; if(gi<=69) return "mid"; return "high"; }
+function glLevel(gl,carbs){ if(carbs<=0.5) return "zero"; if(gl<=10) return "low"; if(gl<=19) return "mid"; return "high"; }
+var LVNAME = {low:"Low",mid:"Medium",high:"High",zero:"No carbs"};
+function tag(lv){return '<span class="tag t-'+lv+'">'+LVNAME[lv]+'</span>'}
+
+/* ---------- state ---------- */
+var state = {q:"",cat:"all",lv:"all",sort:"az",shown:60};
+
+/* ---------- category chips ---------- */
+(function(){
+  var h = '<button class="chip" data-cat="all" aria-pressed="true">All foods</button>';
+  CATORDER.forEach(function(k){ h += '<button class="chip" data-cat="'+k+'" aria-pressed="false">'+CATS[k]+'</button>'; });
+  $("#cats").innerHTML = h;
+  $("#cats").addEventListener("click",function(e){
+    var b = e.target.closest(".chip"); if(!b) return;
+    state.cat = b.dataset.cat; state.shown = 60;
+    [].forEach.call($("#cats").children,function(c){c.setAttribute("aria-pressed", c===b)});
+    render();
+  });
+})();
+
+$("#levels").addEventListener("click",function(e){
+  var b = e.target.closest("button"); if(!b) return;
+  state.lv = b.dataset.lv; state.shown = 60;
+  [].forEach.call($("#levels").children,function(c){c.setAttribute("aria-pressed", c===b)});
+  render();
+});
+$("#sort").addEventListener("change",function(e){state.sort=e.target.value;render()});
+$("#q").addEventListener("input",function(e){
+  state.q = e.target.value.trim().toLowerCase(); state.shown = 60;
+  $("#clearq").hidden = !e.target.value; render();
+});
+$("#clearq").addEventListener("click",function(){$("#q").value="";state.q="";this.hidden=true;render()});
+$("#more").addEventListener("click",function(){state.shown+=60;render()});
+
+/* ---------- filtering ---------- */
+function filtered(){
+  var r = FOODS.filter(function(f){
+    if(state.cat!=="all" && f.c!==state.cat) return false;
+    if(state.lv!=="all"){
+      var lv = glLevel(f.gl,f.cb);
+      if(lv==="zero") lv = "low";           // carb-free foods rank as low by definition
+      if(lv!==state.lv) return false;
+    }
+    if(state.q){
+      var hay = (f.n+" "+CATS[f.c]).toLowerCase();
+      var words = state.q.split(/\s+/);
+      for(var i=0;i<words.length;i++){ if(hay.indexOf(words[i])<0) return false; }
+    }
+    return true;
+  });
+  var s = state.sort;
+  // when searching alphabetically, foods whose name *starts* with the query come first
+  // ("cola" should list Cola before Chocolate, which also contains the letters)
+  function rank(f){
+    if(!state.q) return 0;
+    var n = f.n.toLowerCase();
+    if(n.indexOf(state.q)===0) return 0;
+    if(new RegExp("\\b"+state.q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(n)) return 1;
+    return 2;
+  }
+  r.sort(function(a,b){
+    if(s==="az") return rank(a)-rank(b) || a.n.localeCompare(b.n);
+    if(s==="gi-") return a.gi-b.gi || a.n.localeCompare(b.n);
+    if(s==="gi+") return b.gi-a.gi || a.n.localeCompare(b.n);
+    if(s==="gl-") return a.gl-b.gl || a.n.localeCompare(b.n);
+    return b.gl-a.gl || a.n.localeCompare(b.n);
+  });
+  return r;
+}
+
+function render(){
+  var r = filtered();
+  $("#count").innerHTML = "<b>"+r.length+"</b> food"+(r.length===1?"":"s")+(state.cat!=="all"?" in "+CATS[state.cat]:"")+(state.q?' matching “'+esc(state.q)+'”':"");
+  if(!r.length){
+    $("#list").innerHTML = '<div class="empty">No foods match that search.<br>Try a shorter word, or clear the filters.</div>';
+    $("#more").hidden = true; return;
+  }
+  var slice = r.slice(0,state.shown), h = "";
+  slice.forEach(function(f){
+    var i = FOODS.indexOf(f);
+    h += '<button class="row" data-i="'+i+'">'
+      +   '<div class="nmwrap"><div class="nm">'+esc(f.n)+'</div><div class="mt">'+esc(CATS[f.c])+' · '+esc(f.sl)+' · '+f.cs+' g carbs</div></div>'
+      +   '<div class="stat"><div class="v">'+(f.cb<=0.5?"—":f.gi)+'</div><div class="k">GI</div></div>'
+      +   '<div class="stat"><div class="v">'+(f.cb<=0.5?"—":f.gl)+'</div><div class="k">GL</div></div>'
+      +   '<div class="tagwrap">'+tag(glLevel(f.gl,f.cb))+'</div>'
+      +   '<span class="add-to-cards" role="button" tabindex="0" data-card-add="'+i+'">＋ Add to Cards</span>'
+      + '</button>';
+  });
+  $("#list").innerHTML = h;
+  $("#more").hidden = r.length <= state.shown;
+  $("#more").textContent = "Show "+Math.min(60,r.length-state.shown)+" more of "+r.length;
+}
+$("#list").addEventListener("click",function(e){
+  var add = e.target.closest("[data-card-add]");
+  if(add){
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFoodCard(parseInt(add.dataset.cardAdd,10));
+    return;
+  }
+  var b = e.target.closest(".row"); if(!b) return;
+  openCalc(parseInt(b.dataset.i,10));
+});
+
+/* ---------- tabs ---------- */
+document.querySelector("nav").addEventListener("click",function(e){
+  var b = e.target.closest("button[data-tab]"); if(!b) return; go(b.dataset.tab);
+});
+function go(t){
+  [].forEach.call(document.querySelectorAll("nav button"),function(x){x.setAttribute("aria-selected", x.dataset.tab===t)});
+  ["index","cards","calc","meal","ref"].forEach(function(x){ $("#tab-"+x).hidden = (x!==t); });
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- food dropdowns ---------- */
+function optionsHtml(){
+  var h = '<option value="" selected disabled>Choose a food...</option>', by = {};
+  FOODS.forEach(function(f,i){ (by[f.c]=by[f.c]||[]).push([f,i]); });
+  CATORDER.forEach(function(k){
+    if(!by[k]) return;
+    h += '<optgroup label="'+CATS[k]+'">';
+    by[k].sort(function(a,b){return a[0].n.localeCompare(b[0].n)}).forEach(function(p){
+      h += '<option value="'+p[1]+'">'+esc(p[0].n)+'</option>';
+    });
+    h += '</optgroup>';
+  });
+  return h;
+}
+var OPTS = optionsHtml();
+$("#cfood").innerHTML = OPTS;
+$("#mfood").innerHTML = OPTS;
+
+/* ---------- calculator ---------- */
+/* Start with a food that has measurable GI and carbohydrates. */
+var DEFAULT_CALC_INDEX = FOODS.findIndex(function(f){ return f.gi > 0 && f.cb > 0.5; });
+if(DEFAULT_CALC_INDEX < 0) DEFAULT_CALC_INDEX = 0;
+$("#cfood").value = String(DEFAULT_CALC_INDEX);
+function openCalc(i){
+  if(!FOODS[i]) return;
+  $("#cfood").value = String(i);
+  setGrams(FOODS[i].sg);
+  go("calc");
+  calc();
+}
+function setGrams(g){ g=Math.max(1,Math.round(g)); $("#cgrams").value=g; $("#cslider").value=Math.min(500,Math.max(5,g)); }
+$("#cfood").addEventListener("change",function(){ setGrams(FOODS[+this.value].sg); calc(); });
+$("#cgrams").addEventListener("input",function(){ var g=+this.value||0; $("#cslider").value=Math.min(500,Math.max(5,g)); calc(); });
+$("#cslider").addEventListener("input",function(){ $("#cgrams").value=this.value; calc(); });
+$("#presets").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b) return; setGrams(+b.dataset.g); calc(); });
+
+function calc(){
+  var f = FOODS[+$("#cfood").value];
+  if(!f) return;
+  var g = Math.max(1,+$("#cgrams").value||0);
+  var carbs = f.cb*g/100, gl = f.gi*carbs/100;
+  var lv = glLevel(gl,f.cb);
+  $("#cgl").textContent = f.cb<=0.5 ? "0" : (Math.round(gl*10)/10);
+  $("#cgl").style.color = "var(--"+(lv==="zero"?"zero":lv)+")";
+  $("#ctag").className = "tag t-"+lv;
+  $("#ctag").textContent = lv==="zero" ? "No measurable GL" : LVNAME[lv]+" glycemic load";
+  var marker = document.getElementById("glMarker");
+  if(marker){
+    marker.style.left = Math.max(0,Math.min(100,(gl/40)*100))+"%";
+  }
+  $("#cgi").textContent = f.cb<=0.5 ? "0 (no carbohydrate)" : f.gi;
+  $("#ccarb").textContent = (Math.round(carbs*10)/10)+" g";
+  $("#cper100").textContent = f.cb+" g";
+  $("#ccat").textContent = CATS[f.c];
+  var std = f.sg;
+  $("#presets").innerHTML = [["Half portion",Math.round(std/2)],[f.sl,std],["Double",std*2],["100 g",100]]
+    .map(function(p){return '<button data-g="'+p[1]+'">'+esc(p[0])+'</button>'}).join("");
+  var sw = FOODS.filter(function(x){return x.c===f.c && x.cb>0.5 && x.gi>0 && x.gi <= f.gi-8})
+                .sort(function(a,b){return a.gi-b.gi}).slice(0,3);
+  if(f.cb<=0.5 || !sw.length){ $("#swapbox").hidden = true; }
+  else{
+    $("#swapbox").hidden = false;
+    $("#swaplist").innerHTML = sw.map(function(x){
+      return '<div class="swap"><b>'+esc(x.n)+'</b><span>GI '+x.gi+' &nbsp;·&nbsp; −'+(f.gi-x.gi)+' points</span></div>';
+    }).join("");
+  }
+}
+
+/* ---------- simple meal builder ---------- */
+var meal = [];
+/* Versioned storage prevents old test items from appearing in the new, simpler builder. */
+try{
+  var saved = localStorage.getItem("gigl-meal-v2");
+  if(saved) meal = JSON.parse(saved) || [];
+}catch(e){ meal=[]; }
+
+function saveMeal(){
+  try{ localStorage.setItem("gigl-meal-v2", JSON.stringify(meal)); }catch(e){}
+}
+
+$("#madd").addEventListener("click",function(){
+  var value=$("#mfood").value;
+  if(value===""){ $("#mfood").focus(); return; }
+  var i=+value;
+  if(!FOODS[i]) return;
+  addToMeal(i,FOODS[i].sg);
+  $("#mfood").value="";
+});
+
+$("#addFromCalc").addEventListener("click",function(){
+  addToMeal(+$("#cfood").value, Math.max(1,+$("#cgrams").value||0));
+  go("meal");
+});
+
+$("#mclear").addEventListener("click",function(){
+  meal=[];
+  saveMeal();
+  renderMeal();
+});
+
+function addToMeal(i,g){
+  if(!FOODS[i]) return;
+  meal.push({i:i, g:g || FOODS[i].sg});
+  saveMeal();
+  renderMeal();
+}
+
+$("#mealitems").addEventListener("input",function(e){
+  if(e.target.tagName!=="INPUT") return;
+  var k=+e.target.dataset.k;
+  if(!meal[k]) return;
+  meal[k].g=Math.max(0,+e.target.value||0);
+  saveMeal();
+  updateTotals();
+});
+
+$("#mealitems").addEventListener("click",function(e){
+  var b=e.target.closest(".del");
+  if(!b) return;
+  meal.splice(+b.dataset.k,1);
+  saveMeal();
+  renderMeal();
+});
+
+function renderMeal(){
+  var empty=$("#mealEmpty");
+  if(!meal.length){
+    $("#mealitems").innerHTML="";
+    empty.hidden=false;
+  }else{
+    empty.hidden=true;
+    $("#mealitems").innerHTML=meal.map(function(m,k){
+      var f=FOODS[m.i];
+      return '<div class="mealitem">'
+        + '<div class="nmwrap"><div class="nm">'+esc(f.n)+'</div><div class="mt">'+esc(CATS[f.c])+' · GI '+(f.cb<=0.5?"—":f.gi)+'</div><span class="portion">Standard: '+esc(f.sl)+'</span></div>'
+        + '<div class="gramsbox"><label>GRAMS</label><input type="number" min="0" max="2000" step="1" value="'+m.g+'" data-k="'+k+'" aria-label="Grams of '+esc(f.n)+'"></div>'
+        + '<div class="glbox"><b class="gl" data-gl="'+k+'">0</b><span>GL AT THIS PORTION</span></div>'
+        + '<button class="del" type="button" data-k="'+k+'" aria-label="Remove '+esc(f.n)+'"></button>'
+        + '</div>';
+    }).join("");
+  }
+  updateTotals();
+}
+
+function updateTotals(){
+  var gl=0, carbs=0, w=0;
+
+  meal.forEach(function(m,k){
+    var f=FOODS[m.i];
+    var c=f.cb*m.g/100;
+    /* GL at the user's actual portion:
+       GI × available carbs for that portion ÷ 100. */
+    var g=(f.gi>0 && f.cb>0) ? (f.gi*c/100) : 0;
+    gl+=g; carbs+=c; w+=m.g;
+
+    var el=document.querySelector('[data-gl="'+k+'"]');
+    if(el){
+      if(f.gi<=0 || f.cb<=0.5){
+        el.textContent="—";
+        el.title="No measurable glycemic load for this food";
+        el.style.color="var(--ink-mute)";
+      }else{
+        el.textContent=(Math.round(g*10)/10).toFixed(1);
+        el.title="Glycemic load for this portion";
+        el.style.color="var(--"+glLevel(g,f.cb)+")";
+      }
+    }
+  });
+
+  var lv=meal.length ? glLevel(gl,carbs>0.5?carbs:0) : "zero";
+
+  var measurableMealGL = meal.some(function(m){
+    var f=FOODS[m.i];
+    return f && f.gi>0 && f.cb>0.5 && m.g>0;
+  });
+  $("#mgl").textContent = measurableMealGL ? (Math.round(gl*10)/10).toFixed(1) : "—";
+  $("#mgl").style.color=meal.length ? "var(--"+lv+")" : "var(--ink)";
+  $("#mtag").className="tag t-"+lv;
+  $("#mtag").textContent=!meal.length ? "Empty plate" : (lv==="zero" ? "No measurable impact" : LVNAME[lv]+" glycemic load");
+  $("#mcount").textContent=meal.length;
+  $("#mcarb").textContent=Math.round(carbs*10)/10+" g";
+  $("#mweight").textContent=w+" g";
+
+  var v=$("#mverdict");
+  if(!meal.length){v.hidden=true;return;}
+  v.hidden=false;
+
+  var msg={
+    zero:["var(--zero-bg)","var(--zero)","No measurable glycemic load was calculated for the foods on this plate."],
+    low:["var(--low-bg)","var(--low)","Low glycemic load."],
+    mid:["var(--mid-bg)","var(--mid)","Medium glycemic load. Consider the portion size if you want to lower it."],
+    high:["var(--high-bg)","var(--high)","High glycemic load. Consider reducing the largest carbohydrate portion or choosing a lower-GI option."]
+  }[lv];
+
+  v.style.background=msg[0];
+  v.style.color=msg[1];
+  v.textContent=msg[2];
+}
+
+/* ---------- init ---------- */
+render(); setGrams(FOODS[DEFAULT_CALC_INDEX].sg); calc(); renderMeal();
+</script>
+
+<script>
+/* ================================================================
+   PRESENTATION-ONLY ENHANCEMENTS
+   Adds presentation/navigation enhancements only. It does not alter
+   FOODS, BRAND, localStorage, or the calculation formulas.
+================================================================= */
+(function(){
+  "use strict";
+
+  /* ---- adapt the existing tab-switcher's scroll target to the new layout ----
+     go() (defined above, untouched) calls window.scrollTo({top:0,behavior:"smooth"})
+     on every tab switch. That used to mean "top of the app"; now that a landing
+     page sits above it, "top:0" means "top of the landing page". This redirects
+     only that exact call to the app section's top instead — the tab-switching
+     logic itself (which section shows, aria-selected, etc.) is untouched. */
+  var _scrollTo = window.scrollTo.bind(window);
+  window.scrollTo = function(opts){
+    if(arguments.length === 1 && opts && typeof opts === "object" && opts.top === 0){
+      var appStart = document.getElementById("app-start");
+      if(appStart){
+        var y = appStart.getBoundingClientRect().top + window.pageYOffset - 8;
+        _scrollTo({top:Math.max(0,y), left:0, behavior:opts.behavior || "auto"});
+        return;
+      }
+    }
+    _scrollTo.apply(window, arguments);
+  };
+
+  /* ---- fifth "About" tab: the untouched go() only knows the original
+     four tabs (its section-hiding loop is hardcoded to
+     ["index","calc","meal","ref"]), so it never touches #tab-about.
+     This adds a second, independent listener on the same nav that only
+     manages #tab-about's hidden state — go() still runs first and does
+     everything it always did (aria-selected, the other four sections,
+     scrolling); this just fills the one gap a 5th tab creates. */
+  var tabAbout = document.getElementById("tab-about");
+  var navEl = document.querySelector('nav[role="tablist"]');
+  if(tabAbout && navEl){
+    navEl.addEventListener("click", function(e){
+      var b = e.target.closest("button[data-tab]");
+      if(!b) return;
+      tabAbout.hidden = (b.dataset.tab !== "about");
+    });
+  }
+
+  /* ---- "jump to tab" controls used inside the About tab ---- */
+  document.addEventListener("click", function(e){
+    var b = e.target.closest(".cta-goto");
+    if(!b) return;
+    var target = document.querySelector('nav[role="tablist"] button[data-tab="'+b.dataset.goto+'"]');
+    if(target) target.click();
+  });
+
+  /* ---- scroll-reveal for landing sections ---- */
+  var revealEls = [].slice.call(document.querySelectorAll(".reveal"));
+  if("IntersectionObserver" in window && revealEls.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+    },{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }else{
+    revealEls.forEach(function(el){ el.classList.add("in"); });
+  }
+  // safety net: never let content stay invisible if something above failed
+  setTimeout(function(){ revealEls.forEach(function(el){ el.classList.add("in"); }); }, 2500);
+
+  /* ---- pulse animation on the two hero numbers when their text changes ---- */
+  function watchPulse(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var last = el.textContent;
+    new MutationObserver(function(){
+      if(el.textContent !== last){
+        last = el.textContent;
+        el.classList.remove("pulse");
+        void el.offsetWidth; /* restart animation */
+        el.classList.add("pulse");
+      }
+    }).observe(el,{childList:true,characterData:true,subtree:true});
+  }
+  watchPulse("cgl");
+  watchPulse("mgl");
+
+  /* ---- calculator progress marker: reads the rendered #cgl value only ---- */
+  function refreshMarker(){
+    var num = document.getElementById("cgl");
+    var marker = document.getElementById("glMarker");
+    if(!num || !marker) return;
+    var v = parseFloat(num.textContent);
+    if(isNaN(v)) v = 0;
+    var pct = Math.max(0, Math.min(100, (v/40)*100)); /* 0–40 scale spans the visible bar */
+    marker.style.left = pct + "%";
+  }
+  var cglEl = document.getElementById("cgl");
+  if(cglEl){ new MutationObserver(refreshMarker).observe(cglEl,{childList:true,characterData:true,subtree:true}); refreshMarker(); }
+
+})();
+
+/* ================================================================
+   FOOD CARDS
+================================================================ */
+(function(){
+  "use strict";
+
+  var CARD_KEY = "glycemic_companion_food_cards_v1";
+  var selected = {};
+  try { selected = JSON.parse(localStorage.getItem(CARD_KEY) || "{}") || {}; } catch(e){ selected = {}; }
+
+  var COLORS = {
+    animal:"#34758a",
+    plant:"#668b57",
+    fruit:"#c96b67",
+    veg:"#2f7d5a",
+    grain:"#b58a36",
+    gf:"#8b7445",
+    legume:"#6d824d",
+    nuts:"#a66a45",
+    dairy:"#5b82b0",
+    bev:"#31908a",
+    baking:"#9a6a49",
+    spice:"#9b6c38",
+    oil:"#8a7a3d",
+    prep:"#6b7188"
+  };
+
+  function saveCards(){ localStorage.setItem(CARD_KEY, JSON.stringify(selected)); }
+
+  window.toggleFoodCard = function(i){
+    var key = String(i);
+    if(selected[key]) delete selected[key];
+    else selected[key] = true;
+    saveCards();
+    updateCardButtons();
+    renderSelectedCards();
+  };
+
+  function updateCardButtons(){
+    document.querySelectorAll("[data-card-add]").forEach(function(btn){
+      var i = btn.getAttribute("data-card-add");
+      var on = !!selected[String(i)];
+      btn.textContent = on ? "✓ In Food Cards" : "＋ Add to Cards";
+      btn.style.background = on ? "var(--accent-soft)" : "";
+      btn.style.borderColor = on ? "var(--accent)" : "";
+    });
+  }
+
+  function levelClass(f){
+    var lv = glLevel(f.gl, f.cb);
+    return lv;
+  }
+  function levelLabel(f){
+    var lv = levelClass(f);
+    return lv==="mid" ? "MEDIUM GL" : lv==="high" ? "HIGH GL" : lv==="low" ? "LOW GL" : "NO CARBS";
+  }
+  function levelColor(lv){
+    if(lv==="low") return "var(--low)";
+    if(lv==="mid") return "var(--mid)";
+    if(lv==="high") return "var(--high)";
+    return "var(--zero)";
+  }
+  function levelBg(lv){
+    if(lv==="low") return "var(--low-bg)";
+    if(lv==="mid") return "var(--mid-bg)";
+    if(lv==="high") return "var(--high-bg)";
+    return "var(--zero-bg)";
+  }
+
+  function renderSelectedCards(){
+    var grid = document.getElementById("selectedCardsGrid");
+    var empty = document.getElementById("cardsEmpty");
+    var count = document.getElementById("selectedCardsCount");
+    if(!grid) return;
+
+    var ids = Object.keys(selected).filter(function(k){ return selected[k] && FOODS[+k]; });
+    count.textContent = ids.length;
+    empty.classList.toggle("hidden", ids.length > 0);
+    grid.style.display = ids.length ? "grid" : "none";
+
+    grid.innerHTML = ids.map(function(k){
+      var f = FOODS[+k];
+      var catColor = COLORS[f.c] || "#6f8178";
+      var lv = levelClass(f);
+      var levelClassName = lv==="mid" ? "level-mid" : lv==="high" ? "level-high" : lv==="low" ? "level-low" : "level-zero";
+      return '<article class="selected-card '+levelClassName+'">'
+        + '<div class="selected-card-bar '+levelClassName+'" style="background:'+catColor+'"></div>'
+        + '<button class="selected-card-remove" type="button" aria-label="Remove '+esc(f.n)+'" data-card-remove="'+k+'">×</button>'
+        + '<div class="selected-card-body">'
+        + '<div class="selected-card-cat">'+esc(CATS[f.c] || f.c)+'</div>'
+        + '<div class="selected-card-name">'+esc(f.n)+'</div>'
+        + '<div class="selected-card-metrics">'
+        + '<div class="selected-card-metric"><small>Glycemic Index</small><b>'+(f.cb<=0.5?"—":f.gi)+'</b></div>'
+        + '<div class="selected-card-metric"><small>Glycemic Load</small><b>'+(f.cb<=0.5?"—":f.gl)+'</b></div>'
+        + '</div>'
+        + '<div class="selected-card-meta"><span>'+esc(f.sl)+'</span><span>'+f.cs+' g carbs</span></div>'
+        + '<span class="selected-card-level" style="color:'+levelColor(lv)+';background:'+levelBg(lv)+'">'+levelLabel(f)+'</span>'
+        + '</div></article>';
+    }).join("");
+
+    updateCardButtons();
+  }
+
+  function printCards(){
+    var ids = Object.keys(selected).filter(function(k){ return selected[k] && FOODS[+k]; });
+    if(!ids.length){ alert("Add at least one food to your Food Cards first."); return; }
+
+    /* Open a completely separate print document.
+       This prevents any part of the main app (footer, disclaimer, tabs, etc.)
+       from leaking into the print preview. */
+    var win = window.open("", "glycemicFoodCardsPrint", "width=1000,height=800");
+    if(!win){
+      alert("Please allow pop-ups for this file to print your Food Cards.");
+      return;
+    }
+
+    var cards = ids.map(function(k){
+      var f = FOODS[+k];
+      var lv = levelClass(f);
+      var color = lv==="high" ? "#c62828" : lv==="mid" ? "#e0a800" : lv==="low" ? "#16803a" : "#687870";
+      var tint = lv==="high" ? "#fff1f1" : lv==="mid" ? "#fff9dc" : lv==="low" ? "#effaf2" : "#f4f6f5";
+      var badgeText = lv==="high" ? "HIGH GL" : lv==="mid" ? "MEDIUM GL" : lv==="low" ? "LOW GL" : "NO CARBS";
+      var badgeTextColor = lv==="mid" ? "#1b1b1b" : "#ffffff";
+      return '<article class="card" style="--level:'+color+';--tint:'+tint+';">'
+        + '<div class="bar" style="background:'+color+'">'+esc(CATS[f.c]||f.c)+'</div>'
+        + '<div class="body">'
+        + '<div class="category">'+esc(CATS[f.c]||f.c)+'</div>'
+        + '<h2>'+esc(f.n)+'</h2>'
+        + '<div class="metrics">'
+        + '<div class="metric"><span>GLYCEMIC INDEX</span><b>'+(f.cb<=0.5?"—":f.gi)+'</b></div>'
+        + '<div class="metric"><span>GLYCEMIC LOAD</span><b>'+(f.cb<=0.5?"—":f.gl)+'</b></div>'
+        + '</div>'
+        + '<div class="meta"><span>'+esc(f.sl)+'</span><span>'+f.cs+' g carbs</span></div>'
+        + '<span class="badge" style="background:'+color+';color:'+badgeTextColor+'">'+badgeText+'</span>'
+        + '</div></article>';
+    }).join("");
+
+    var doc = '<!doctype html><html><head><meta charset="utf-8"><title>Glycemic Food Cards</title>'
+      + '<style>'
+      + '*{box-sizing:border-box}'
+      + 'html,body{margin:0;padding:0;background:#fff;color:#1f2a25;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+      + 'body{padding:0}'
+      + '.sheet{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:0}'
+      + '.card{min-height:84mm;border:1px dashed #9eaaa4;background:var(--tint);break-inside:avoid;page-break-inside:avoid;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+      + '.bar{height:15mm;padding:0 7mm;display:flex;align-items:center;color:#fff;font-size:10pt;font-weight:900;letter-spacing:1px;text-transform:uppercase;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+      + '.body{padding:5.5mm 7mm 6mm}'
+      + '.category{font-size:8pt;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;color:#687870;margin-bottom:2mm}'
+      + 'h2{font-family:Georgia,"Times New Roman",serif;font-size:19pt;line-height:1.12;margin:0 0 5mm;color:#17231d}'
+      + '.metrics{display:grid;grid-template-columns:1fr 1fr;gap:3mm}'
+      + '.metric{padding:3.2mm;border:1px solid #cfd9d3;border-radius:3mm;background:#fff;text-align:center}'
+      + '.metric span{display:block;font-size:7pt;font-weight:900;letter-spacing:.7px;color:#617069}'
+      + '.metric b{display:block;font-size:17pt;line-height:1;margin-top:1.5mm;color:#17231d}'
+      + '.meta{display:flex;justify-content:space-between;gap:5mm;margin-top:4mm;font-size:8pt;color:#52625a}'
+      + '.badge{display:inline-block;margin-top:4mm;padding:2mm 4mm;border-radius:1.5mm;font-size:7.5pt;font-weight:900;letter-spacing:.8px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'
+      + '@page{size:Letter;margin:8mm}'
+      + '@media print{html,body{width:auto!important;height:auto!important}.sheet{width:100%!important}}'
+      + '</style></head><body><main class="sheet">'+cards+'</main>'
+      + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},250)};<\/script>'
+      + '</body></html>';
+
+    win.document.open();
+    win.document.write(doc);
+    win.document.close();
+}
+
+  document.addEventListener("click", function(e){
+    var rem = e.target.closest("[data-card-remove]");
+    if(rem){
+      delete selected[String(rem.getAttribute("data-card-remove"))];
+      saveCards();
+      renderSelectedCards();
+      return;
+    }
+    if(e.target.id==="cardsSelectAll"){
+      FOODS.forEach(function(_,i){ selected[String(i)] = true; });
+      saveCards(); renderSelectedCards(); return;
+    }
+    if(e.target.id==="cardsClear"){
+      selected = {};
+      saveCards(); renderSelectedCards(); return;
+    }
+    if(e.target.id==="printFoodCards"){
+      printCards(); return;
+    }
+    if(e.target.id==="cardsGoIndex"){
+      go("index"); return;
+    }
+  });
+
+  window.addEventListener("afterprint",function(){
+    document.body.classList.remove("print-food-cards");
+  });
+
+  renderSelectedCards();
+  updateCardButtons();
+})();
+
+</script>
+<div id="foodCardsPrintArea" aria-hidden="true"></div>
+</body>
+</html>
